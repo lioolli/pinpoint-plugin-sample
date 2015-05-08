@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.example;
+package com.navercorp.pinpoint.plugin.sample;
 
 import static com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.ExpectedAnnotation.*;
 
@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.BlockType;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -36,13 +37,13 @@ import com.navercorp.target.TargetClass8_Producer;
  * But we can not retrieve the producer name in the method. 
  * So we intercept {@link TargetClass8_Producer#produce()} to inject producer name into the returning {@link TargetClass8_Message}. 
  * 
- * @see {@link MyPlugin#example8_Inject_Metadata(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)}
+ * @see MyPlugin#sample8_Inject_Metadata(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
 @Dependency({"com.navercorp.pinpoint:plugin-example-target:[1.0.0,)"})
-public class Example8_Inject_Metadata_IT {
+public class Sample8_Inject_Metadata_IT {
 
     @Test
     public void test() throws Exception {

@@ -1,1 +1,1 @@
-com.navercorp.pinpoint.plugin.example.MyTraceMetadataProvider
+com.navercorp.pinpoint.plugin.sample.MyTraceMetadataProvider

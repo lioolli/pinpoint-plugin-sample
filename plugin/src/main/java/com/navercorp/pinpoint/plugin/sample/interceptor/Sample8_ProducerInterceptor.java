@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.example.interceptor;
+package com.navercorp.pinpoint.plugin.sample.interceptor;
 
 import com.navercorp.pinpoint.bootstrap.MetadataAccessor;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
@@ -21,23 +21,21 @@ import com.navercorp.pinpoint.bootstrap.interceptor.SimpleAroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 import com.navercorp.pinpoint.bootstrap.plugin.annotation.Name;
-import com.navercorp.pinpoint.plugin.example.MyPlugin;
+import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.target.TargetClass8_Producer;
 
 /**
- * This interceptor shows how to record a method invocation with it's arguments and return value.
- * 
- * @see {@link MyPlugin#example8_Inject_Metadata(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)}
+ * @see MyPlugin#sample8_Inject_Metadata(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
  * @author Jongho Moon
  */
-public class Ex8_ProducerInterceptor implements SimpleAroundInterceptor {
+public class Sample8_ProducerInterceptor implements SimpleAroundInterceptor {
 
     private final PLogger logger = PLoggerFactory.getLogger(getClass());
     private final boolean isDebug = logger.isDebugEnabled();
 
     private final MetadataAccessor accessor;
 
-    public Ex8_ProducerInterceptor(TraceContext traceContext, MethodDescriptor descriptor, @Name("producerName") MetadataAccessor accessor) {
+    public Sample8_ProducerInterceptor(TraceContext traceContext, MethodDescriptor descriptor, @Name("producerName") MetadataAccessor accessor) {
         this.accessor = accessor;
     }
     

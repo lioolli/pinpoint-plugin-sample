@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.example;
+package com.navercorp.pinpoint.plugin.sample;
 
 import java.lang.reflect.Modifier;
 

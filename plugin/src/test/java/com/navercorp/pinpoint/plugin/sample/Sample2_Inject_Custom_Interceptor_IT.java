@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.example;
+package com.navercorp.pinpoint.plugin.sample;
 
 import static com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.ExpectedAnnotation.*;
 
@@ -25,19 +25,20 @@ import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.BlockType;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.ExpectedAnnotation;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
 import com.navercorp.target.TargetClass2;
 
 /**
- * @see {@link MyPlugin#example2_Inject_Custom_Interceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)}
+ * @see MyPlugin#sample2_Inject_Custom_Interceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
 @Dependency({"com.navercorp.pinpoint:plugin-example-target:[1.0.0,)"})
-public class Example2_Inject_Custom_Interceptor_IT {
+public class Sample2_Inject_Custom_Interceptor_IT {
 
     @Test
     public void test() throws Exception {

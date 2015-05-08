@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.example;
+package com.navercorp.pinpoint.plugin.sample;
 
 import java.lang.reflect.Method;
 
@@ -21,19 +21,20 @@ import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
 import com.navercorp.target.TargetClass1;
 
 /**
- * @see {@link MyPlugin#example1_Inject_BasicMethodInterceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)}
+ * @see MyPlugin#sample1_Inject_BasicMethodInterceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
 @Dependency({"com.navercorp.pinpoint:plugin-example-target:[1.0.0,)"})
-public class Example1_Inject_BasicMethodInterceptor_IT {
+public class Sample1_Inject_BasicMethodInterceptor_IT {
 
     @Test
     public void test() throws Exception {

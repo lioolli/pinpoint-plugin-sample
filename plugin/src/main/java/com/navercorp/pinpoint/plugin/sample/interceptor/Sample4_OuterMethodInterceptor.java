@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.example.interceptor;
+package com.navercorp.pinpoint.plugin.sample.interceptor;
 
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
@@ -23,17 +23,17 @@ import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.plugin.example.MyAttachment;
-import com.navercorp.pinpoint.plugin.example.MyPlugin;
+import com.navercorp.pinpoint.plugin.sample.MyAttachment;
+import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 
 /**
  * This interceptor attach an object to current {@link InterceptorGroupInvocation}.
- * The attachment helps the interceptor collaborates with {@link Ex4_InnerMethodInterceptor}.
+ * The attachment helps the interceptor collaborates with {@link Sample4_InnerMethodInterceptor}.
  * 
- * @see {@link MyPlugin#example4_Interceptors_In_A_Group_Share_Value(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)}
+ * @see MyPlugin#example4_Interceptors_In_A_Group_Share_Value(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
  * @author Jongho Moon
  */
-public class Ex4_OuterMethodInterceptor implements SimpleAroundInterceptor {
+public class Sample4_OuterMethodInterceptor implements SimpleAroundInterceptor {
     private static final AttachmentFactory ATTACHMENT_FACTORY = new AttachmentFactory() {
         
         @Override
@@ -49,7 +49,7 @@ public class Ex4_OuterMethodInterceptor implements SimpleAroundInterceptor {
     private final TraceContext traceContext;
     private final InterceptorGroup group;
 
-    public Ex4_OuterMethodInterceptor(TraceContext traceContext, MethodDescriptor descriptor, InterceptorGroup group) {
+    public Sample4_OuterMethodInterceptor(TraceContext traceContext, MethodDescriptor descriptor, InterceptorGroup group) {
         this.descriptor = descriptor;
         this.traceContext = traceContext;
         this.group = group;
@@ -104,7 +104,7 @@ public class Ex4_OuterMethodInterceptor implements SimpleAroundInterceptor {
             trace.recordApi(descriptor, args);
             trace.recordException(throwable);
             
-            // record the value set by Ex4_InnerMethodInterceptor
+            // record the value set by Sample4_InnerMethodInterceptor
             trace.recordAttribute(MyPlugin.ANNOTATION_KEY_MY_VALUE, attachment.getValue());
 
             trace.markAfterTime();

@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 NAVER Corp.
+ * Copyright 2014 https://github.com/lioolli/pinpoint-plugin-samplehttps://github.com/lioolli/pinpoint-plugin-sampleNAVER Corp.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.example;
+package com.navercorp.pinpoint.plugin.sample;
 
 import java.lang.reflect.Method;
 
@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -33,14 +34,13 @@ import com.navercorp.target.TargetClass3;
  * 
  * So in {@link #testA()}, only {@link TargetClass3#tergetMethodA()} is recorded and in {@link #testB()}, only {@link TargetClass3#targetMethodB(int)} is recorded.
  * 
- * @see {@link MyPlugin#example3_Use_Interceptor_Group_To_Prevent_Redundant_Trace(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)}
- * 
+ * @see MyPlugin#sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
 @Dependency({"com.navercorp.pinpoint:plugin-example-target:[1.0.0,)"})
-public class Example3_Use_Interceptor_Group_To_Prevent_Redundant_Trace_IT {
+public class Sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace_IT {
 
     @Test
     public void testA() throws Exception {

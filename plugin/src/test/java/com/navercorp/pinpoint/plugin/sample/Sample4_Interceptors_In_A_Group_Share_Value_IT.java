@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.example;
+package com.navercorp.pinpoint.plugin.sample;
 
 import static com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.ExpectedAnnotation.*;
 
@@ -25,6 +25,7 @@ import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvoca
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.BlockType;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -38,17 +39,16 @@ import com.navercorp.target.TargetClass4;
  *  When an InterceptorGroupInvocation is activated, interceptors in the group can share an attachment object.
  *  InterceptorGroupInvocation is activated when before() of any of interceptors in the group is invoked, but after() of it is not invoked.
  *  
- * @see {@link MyPlugin#example4_Interceptors_In_A_Group_Share_Value(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)}
- * 
+ * @see MyPlugin#sample4_Interceptors_In_A_Group_Share_Value(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
 @Dependency({"com.navercorp.pinpoint:plugin-example-target:[1.0.0,)"})
-public class Example4_Interceptors_In_A_Group_Share_Value_IT {
+public class Sample4_Interceptors_In_A_Group_Share_Value_IT {
 
     @Test
-    public void testA() throws Exception {
+    public void test() throws Exception {
         String name = "FOOBAR";
         int length = name.length();
 

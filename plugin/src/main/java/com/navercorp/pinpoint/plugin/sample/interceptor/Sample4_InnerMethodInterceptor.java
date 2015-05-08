@@ -12,30 +12,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.example.interceptor;
+package com.navercorp.pinpoint.plugin.sample.interceptor;
 
 import com.navercorp.pinpoint.bootstrap.interceptor.SimpleAroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.plugin.example.MyAttachment;
-import com.navercorp.pinpoint.plugin.example.MyPlugin;
+import com.navercorp.pinpoint.plugin.sample.MyAttachment;
+import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 
 /**
- * This interceptor uses {@link InterceptorGroupInvocation} attachment to pass data to {@link Ex4_OuterMethodInterceptor}
+ * This interceptor uses {@link InterceptorGroupInvocation} attachment to pass data to {@link Sample4_OuterMethodInterceptor}
  * 
- * @see {@link MyPlugin#example4_Interceptors_In_A_Group_Share_Value(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)}
+ * @see MyPlugin#sample4_Interceptors_In_A_Group_Share_Value(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
  * @author Jongho Moon
  */
-public class Ex4_InnerMethodInterceptor implements SimpleAroundInterceptor {
+public class Sample4_InnerMethodInterceptor implements SimpleAroundInterceptor {
 
     private final PLogger logger = PLoggerFactory.getLogger(getClass());
     private final boolean isDebug = logger.isDebugEnabled();
 
     private final InterceptorGroup group;
 
-    public Ex4_InnerMethodInterceptor(InterceptorGroup group) {
+    public Sample4_InnerMethodInterceptor(InterceptorGroup group) {
         this.group = group;
     }
     

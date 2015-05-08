@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.example.interceptor;
+package com.navercorp.pinpoint.plugin.sample.interceptor;
 
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
@@ -20,15 +20,15 @@ import com.navercorp.pinpoint.bootstrap.interceptor.MethodDescriptor;
 import com.navercorp.pinpoint.bootstrap.interceptor.SimpleAroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.plugin.example.MyPlugin;
+import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 
 /**
  * This interceptor shows how to record a method invocation with it's arguments and return value.
  * 
- * @see {@link MyPlugin#example2_Inject_Custom_Interceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)}
+ * @see MyPlugin#example2_Inject_Custom_Interceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
  * @author Jongho Moon
  */
-public class Ex2_RecordArgsAndReturnValueInterceptor implements SimpleAroundInterceptor {
+public class Sample2_RecordArgsAndReturnValueInterceptor implements SimpleAroundInterceptor {
 
     // You'd better use PLogger for logging 
     private final PLogger logger = PLoggerFactory.getLogger(getClass());
@@ -37,7 +37,7 @@ public class Ex2_RecordArgsAndReturnValueInterceptor implements SimpleAroundInte
     private final MethodDescriptor descriptor;
     private final TraceContext traceContext;
 
-    public Ex2_RecordArgsAndReturnValueInterceptor(TraceContext traceContext, MethodDescriptor descriptor) {
+    public Sample2_RecordArgsAndReturnValueInterceptor(TraceContext traceContext, MethodDescriptor descriptor) {
         this.descriptor = descriptor;
         this.traceContext = traceContext;
     }
