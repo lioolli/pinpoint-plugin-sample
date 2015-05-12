@@ -21,7 +21,6 @@ import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -61,13 +60,13 @@ public class Sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace_IT {
     @Test
     public void testB() throws Exception {
         TargetClass3 target = new TargetClass3();
-        target.targetMethodA();
+        target.targetMethodB(3);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache(System.out);
         verifier.printBlocks(System.out);
         
-        Method targetMethod = TargetClass3.class.getMethod("targetMethodA");
+        Method targetMethod = TargetClass3.class.getMethod("targetMethodB", int.class);
         verifier.verifyApi("PluginExample", targetMethod);
         
         // no more traces
