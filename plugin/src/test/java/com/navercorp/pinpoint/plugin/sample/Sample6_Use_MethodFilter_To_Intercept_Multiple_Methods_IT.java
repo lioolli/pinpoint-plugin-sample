@@ -36,7 +36,7 @@ import com.navercorp.target.TargetClass6;
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
-@Dependency({"com.navercorp.pinpoint:plugin-example-target:[1.0.0,)"})
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:[1.0.0,)", "log4j:log4j:1.2.17"})
 public class Sample6_Use_MethodFilter_To_Intercept_Multiple_Methods_IT {
 
     @Test

@@ -44,7 +44,7 @@ import com.navercorp.target.TargetClass4;
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
-@Dependency({"com.navercorp.pinpoint:plugin-example-target:[1.0.0,)"})
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:[1.0.0,)", "log4j:log4j:1.2.17"})
 public class Sample4_Interceptors_In_A_Group_Share_Value_IT {
 
     @Test
