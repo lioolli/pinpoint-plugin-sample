@@ -14,7 +14,7 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
-import static com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.ExpectedAnnotation.*;
+import static com.navercorp.pinpoint.bootstrap.plugin.test.Expectations.*;
 
 import java.lang.reflect.Method;
 
@@ -23,9 +23,7 @@ import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
-import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.BlockType;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -56,13 +54,12 @@ public class Sample4_Interceptors_In_A_Group_Share_Value_IT {
         target.outerMethod(name);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
-        verifier.printCache(System.out);
-        verifier.printBlocks(System.out);
+        verifier.printCache();
         
         Method targetMethod = TargetClass4.class.getMethod("outerMethod", String.class);
-        verifier.verifyTraceBlock(BlockType.EVENT, "PluginExample", targetMethod, null, null, null, null, args(name)[0], annotation("MyValue", length));
+        verifier.verifyTrace(event("PluginExample", targetMethod, args(name)[0], annotation("MyValue", length)));
         
         // no more traces
-        verifier.verifyTraceBlockCount(0);
+        verifier.verifyTraceCount(0);
     }
 }

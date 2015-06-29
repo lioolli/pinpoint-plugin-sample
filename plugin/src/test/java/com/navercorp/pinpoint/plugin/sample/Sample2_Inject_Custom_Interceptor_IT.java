@@ -14,18 +14,15 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
-import static com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.ExpectedAnnotation.*;
-
 import java.lang.reflect.Method;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
+import com.navercorp.pinpoint.bootstrap.plugin.test.ExpectedAnnotation;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
-import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.BlockType;
-import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier.ExpectedAnnotation;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -48,17 +45,16 @@ public class Sample2_Inject_Custom_Interceptor_IT {
         String hello = target.targetMethod(name);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
-        verifier.printCache(System.out);
-        verifier.printBlocks(System.out);
+        verifier.printCache();
         
         Method targetMethod = TargetClass2.class.getMethod("targetMethod", String.class);
         
-        ExpectedAnnotation[] args = args(name);
-        ExpectedAnnotation returnValue = annotation("ReturnValue", hello);
+        ExpectedAnnotation[] args = Expectations.args(name);
+        ExpectedAnnotation returnValue = Expectations.annotation("ReturnValue", hello);
         
-        verifier.verifyTraceBlock(BlockType.EVENT, "PluginExample", targetMethod, null, null, null, null, args[0], returnValue);
+        verifier.verifyTrace(Expectations.event("PluginExample", targetMethod, args[0], returnValue));
         
         // no more traces
-        verifier.verifyTraceBlockCount(0);
+        verifier.verifyTraceCount(0);
     }
 }

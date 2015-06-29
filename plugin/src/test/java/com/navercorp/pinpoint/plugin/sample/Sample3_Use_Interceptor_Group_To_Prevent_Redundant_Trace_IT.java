@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
 import com.navercorp.pinpoint.test.plugin.Dependency;
@@ -47,14 +48,13 @@ public class Sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace_IT {
         target.targetMethodA();
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
-        verifier.printCache(System.out);
-        verifier.printBlocks(System.out);
+        verifier.printCache();
         
         Method targetMethod = TargetClass3.class.getMethod("targetMethodA");
-        verifier.verifyApi("PluginExample", targetMethod);
+        verifier.verifyTrace(Expectations.event("PluginExample", targetMethod));
         
         // no more traces
-        verifier.verifyTraceBlockCount(0);
+        verifier.verifyTraceCount(0);
     }
     
     @Test
@@ -63,13 +63,12 @@ public class Sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace_IT {
         target.targetMethodB(3);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
-        verifier.printCache(System.out);
-        verifier.printBlocks(System.out);
+        verifier.printCache();
         
         Method targetMethod = TargetClass3.class.getMethod("targetMethodB", int.class);
-        verifier.verifyApi("PluginExample", targetMethod);
+        verifier.verifyTrace(Expectations.event("PluginExample", targetMethod));
         
         // no more traces
-        verifier.verifyTraceBlockCount(0);
+        verifier.verifyTraceCount(0);
     }
 }

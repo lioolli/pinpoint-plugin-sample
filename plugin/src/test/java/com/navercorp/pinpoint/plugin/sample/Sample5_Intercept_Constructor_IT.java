@@ -14,6 +14,8 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
+import static com.navercorp.pinpoint.bootstrap.plugin.test.Expectations.*;
+
 import java.lang.reflect.Constructor;
 
 import org.junit.Test;
@@ -21,7 +23,6 @@ import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -44,14 +45,13 @@ public class Sample5_Intercept_Constructor_IT {
         target.getName();
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
-        verifier.printCache(System.out);
-        verifier.printBlocks(System.out);
+        verifier.printCache();
         
         Constructor<?> targetConstructor = TargetClass5.class.getConstructor(String.class);
-        verifier.verifyApi("PluginExample", targetConstructor, name);
+        verifier.verifyTrace(event("PluginExample", targetConstructor, args(name)));
         
         
         // no more traces
-        verifier.verifyTraceBlockCount(0);
+        verifier.verifyTraceCount(0);
     }
 }

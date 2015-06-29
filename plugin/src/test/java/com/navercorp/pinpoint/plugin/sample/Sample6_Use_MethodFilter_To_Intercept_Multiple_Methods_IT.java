@@ -20,9 +20,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.instrument.MethodFilter;
+import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -63,13 +63,12 @@ public class Sample6_Use_MethodFilter_To_Intercept_Multiple_Methods_IT {
         packagePrivateMethod.invoke(target);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
-        verifier.printCache(System.out);
-        verifier.printBlocks(System.out);
+        verifier.printCache();
         
-        verifier.verifyApi("PluginExample", publicMethod1);
-        verifier.verifyApi("PluginExample", publicMethod2);
+        verifier.verifyTrace(Expectations.event("PluginExample", publicMethod1));
+        verifier.verifyTrace(Expectations.event("PluginExample", publicMethod2));
         
         // no more traces
-        verifier.verifyTraceBlockCount(0);
+        verifier.verifyTraceCount(0);
     }
 }
