@@ -15,6 +15,7 @@
 package com.navercorp.pinpoint.plugin.sample.interceptor;
 
 import com.navercorp.pinpoint.bootstrap.MetadataAccessor;
+import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.interceptor.MethodDescriptor;
@@ -54,10 +55,8 @@ public class Sample8_ConsumerInterceptor implements SimpleAroundInterceptor {
             return;
         }
 
-        trace.traceBlockBegin();
-        trace.markBeforeTime();
-
-        trace.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
+        SpanEventRecorder recorder = trace.traceBlockBegin();
+        recorder.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
     }
 
     @Override
@@ -72,13 +71,12 @@ public class Sample8_ConsumerInterceptor implements SimpleAroundInterceptor {
         }
 
         try {
-            trace.recordApi(descriptor);
-            trace.recordException(throwable);
+            SpanEventRecorder recorder = trace.currentSpanEventRecorder();
+            recorder.recordApi(descriptor);
+            recorder.recordException(throwable);
             
             String producerName = accessor.get(args[0]);
-            trace.recordAttribute(MyPlugin.ANNOTATION_KEY_MY_VALUE, producerName);
-
-            trace.markAfterTime();
+            recorder.recordAttribute(MyPlugin.ANNOTATION_KEY_MY_VALUE, producerName);
         } finally {
             trace.traceBlockEnd();
         }

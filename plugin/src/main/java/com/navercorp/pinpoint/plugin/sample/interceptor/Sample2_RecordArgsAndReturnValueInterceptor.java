@@ -14,6 +14,7 @@
  */
 package com.navercorp.pinpoint.plugin.sample.interceptor;
 
+import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.interceptor.MethodDescriptor;
@@ -54,9 +55,8 @@ public class Sample2_RecordArgsAndReturnValueInterceptor implements SimpleAround
         }
 
         trace.traceBlockBegin();
-        trace.markBeforeTime();
-
-        trace.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
+        SpanEventRecorder recorder = trace.traceBlockBegin();
+        recorder.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
     }
 
     @Override
@@ -71,16 +71,16 @@ public class Sample2_RecordArgsAndReturnValueInterceptor implements SimpleAround
         }
 
         try {
+            SpanEventRecorder recorder = trace.currentSpanEventRecorder();
+
             // record method signature and arguments 
-            trace.recordApi(descriptor, args);
+            recorder.recordApi(descriptor, args);
             
             // record exception if any.
-            trace.recordException(throwable);
+            recorder.recordException(throwable);
             
             // Trace doesn't provide a method to record return value. You have to record as an attribute.
-            trace.recordAttribute(MyPlugin.ANNOTATION_KEY_RETURN_VALUE, result);
-
-            trace.markAfterTime();
+            recorder.recordAttribute(MyPlugin.ANNOTATION_KEY_RETURN_VALUE, result);
         } finally {
             trace.traceBlockEnd();
         }

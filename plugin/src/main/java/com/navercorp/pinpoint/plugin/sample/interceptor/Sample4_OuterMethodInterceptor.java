@@ -14,6 +14,7 @@
  */
 package com.navercorp.pinpoint.plugin.sample.interceptor;
 
+import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.instrument.AttachmentFactory;
@@ -73,10 +74,8 @@ public class Sample4_OuterMethodInterceptor implements SimpleAroundInterceptor {
             return;
         }
 
-        trace.traceBlockBegin();
-        trace.markBeforeTime();
-
-        trace.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
+        SpanEventRecorder recorder = trace.traceBlockBegin();
+        recorder.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
 
         // create attachment
         MyAttachment attachment = (MyAttachment)group.getCurrentInvocation().getOrCreateAttachment(ATTACHMENT_FACTORY);
@@ -101,13 +100,13 @@ public class Sample4_OuterMethodInterceptor implements SimpleAroundInterceptor {
                 return; 
             }
             
-            trace.recordApi(descriptor, args);
-            trace.recordException(throwable);
+            SpanEventRecorder recorder = trace.currentSpanEventRecorder();
+            
+            recorder.recordApi(descriptor, args);
+            recorder.recordException(throwable);
             
             // record the value set by Sample4_InnerMethodInterceptor
-            trace.recordAttribute(MyPlugin.ANNOTATION_KEY_MY_VALUE, attachment.getValue());
-
-            trace.markAfterTime();
+            recorder.recordAttribute(MyPlugin.ANNOTATION_KEY_MY_VALUE, attachment.getValue());
         } finally {
             trace.traceBlockEnd();
         }

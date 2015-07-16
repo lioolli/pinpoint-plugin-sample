@@ -28,8 +28,8 @@ import com.navercorp.pinpoint.bootstrap.instrument.MethodInfo;
 public class MyMethodFilter implements MethodFilter {
 
     @Override
-    public boolean filter(MethodInfo method) {
-        return !Modifier.isPublic(method.getModifiers());
+    public boolean accept(MethodInfo method) {
+        return Modifier.isPublic(method.getModifiers());
     }
 
 }

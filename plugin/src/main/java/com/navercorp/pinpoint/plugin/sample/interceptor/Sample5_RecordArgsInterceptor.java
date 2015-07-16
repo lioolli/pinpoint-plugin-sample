@@ -14,6 +14,7 @@
  */
 package com.navercorp.pinpoint.plugin.sample.interceptor;
 
+import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.interceptor.MethodDescriptor;
@@ -50,10 +51,8 @@ public class Sample5_RecordArgsInterceptor implements SimpleAroundInterceptor {
             return;
         }
 
-        trace.traceBlockBegin();
-        trace.markBeforeTime();
-
-        trace.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
+        SpanEventRecorder recorder = trace.traceBlockBegin();
+        recorder.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
     }
 
     @Override
@@ -68,10 +67,10 @@ public class Sample5_RecordArgsInterceptor implements SimpleAroundInterceptor {
         }
 
         try {
-            trace.recordApi(descriptor, args);
-            trace.recordException(throwable);
-
-            trace.markAfterTime();
+            SpanEventRecorder recorder = trace.currentSpanEventRecorder();
+            
+            recorder.recordApi(descriptor, args);
+            recorder.recordException(throwable);
         } finally {
             trace.traceBlockEnd();
         }
