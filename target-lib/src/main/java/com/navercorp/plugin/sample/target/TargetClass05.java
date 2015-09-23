@@ -1,9 +1,9 @@
-package com.navercorp.target;
+package com.navercorp.plugin.sample.target;
 
-public class TargetClass5 {
+public class TargetClass05 {
     private final String name;
 
-    public TargetClass5(String name) {
+    public TargetClass05(String name) {
         this.name = name;
     }
 

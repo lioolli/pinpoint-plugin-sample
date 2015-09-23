@@ -26,29 +26,29 @@ import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.target.TargetClass8_Consumer;
-import com.navercorp.target.TargetClass8_Message;
-import com.navercorp.target.TargetClass8_Producer;
+import com.navercorp.plugin.sample.target.TargetClass10_Consumer;
+import com.navercorp.plugin.sample.target.TargetClass10_Message;
+import com.navercorp.plugin.sample.target.TargetClass10_Producer;
 
 /**
- * We want to trace {@link TargetClass8_Consumer#consume(TargetClass8_Message)} with producer name.
+ * We want to trace {@link TargetClass10_Consumer#consume(TargetClass10_Message)} with producer name.
  * But we can not retrieve the producer name in the method. 
- * So we intercept {@link TargetClass8_Producer#produce()} to inject producer name into the returning {@link TargetClass8_Message}. 
+ * So we intercept {@link TargetClass10_Producer#produce()} to inject producer name into the returning {@link TargetClass10_Message}. 
  * 
- * @see MyPlugin#sample8_Inject_Metadata(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
+ * @see MyPlugin#sample8_Inject_Metadata(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
-@Dependency({"com.navercorp.pinpoint:plugin-sample-target:[1.0.0,)", "log4j:log4j:1.2.17"})
-public class Sample8_Inject_Metadata_IT {
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
+public class Sample_10_Adding_Field_IT {
 
     @Test
     public void test() throws Exception {
         String name = "Pinpoint";
         
-        TargetClass8_Producer producer = new TargetClass8_Producer(name);
-        TargetClass8_Consumer consumer = new TargetClass8_Consumer();
+        TargetClass10_Producer producer = new TargetClass10_Producer(name);
+        TargetClass10_Consumer consumer = new TargetClass10_Consumer();
         
         consumer.consume(producer.produce());
 
@@ -56,7 +56,7 @@ public class Sample8_Inject_Metadata_IT {
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        Method targetMethod = TargetClass8_Consumer.class.getMethod("consume", TargetClass8_Message.class);
+        Method targetMethod = TargetClass10_Consumer.class.getMethod("consume", TargetClass10_Message.class);
         
         verifier.verifyTrace(event("PluginExample", targetMethod, annotation("MyValue", name)));
         

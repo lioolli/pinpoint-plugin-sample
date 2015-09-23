@@ -12,37 +12,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample._10_Adding_Field;
+package com.navercorp.pinpoint.plugin.sample._08_Interceptor_Annotations;
 
 import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
-import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor0;
+import com.navercorp.pinpoint.bootstrap.interceptor.annotation.Group;
+import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetMethod;
+import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetMethods;
 import com.navercorp.pinpoint.plugin.sample.MyPluginConstants;
 
-public class ConsumerInterceptor implements AroundInterceptor1 {
+/**
+ * This interceptor declares its targets by @TargetMethods annotation and interceptor group by @Group annotation. 
+ * 
+ * @see Sample_08_Interceptor_Annotations
+ * @author Jongho Moon
+ */
+@Group("SAMPLE_GROUP")
+@TargetMethods({
+    @TargetMethod(name="targetMethod"),
+    @TargetMethod(name="targetMethod", paramTypes={"java.lang.String"})
+})
+public class AnnotatedInterceptor implements AroundInterceptor0 {
     private final MethodDescriptor descriptor;
     private final TraceContext traceContext;
 
-    public ConsumerInterceptor(TraceContext traceContext, MethodDescriptor descriptor) {
-        this.descriptor = descriptor;
+    public AnnotatedInterceptor(TraceContext traceContext, MethodDescriptor descriptor) {
         this.traceContext = traceContext;
+        this.descriptor = descriptor;
     }
-    
+
     @Override
-    public void before(Object target, Object arg0) {
+    public void before(Object target) {
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
         }
 
-        SpanEventRecorder recorder = trace.traceBlockBegin();
-        recorder.recordServiceType(MyPluginConstants.MY_SERVICE_TYPE);
+        trace.traceBlockBegin();
     }
 
     @Override
-    public void after(Object target, Object result, Throwable throwable, Object arg0) {
+    public void after(Object target, Object result, Throwable throwable) {
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
@@ -50,12 +63,9 @@ public class ConsumerInterceptor implements AroundInterceptor1 {
 
         try {
             SpanEventRecorder recorder = trace.currentSpanEventRecorder();
+            recorder.recordServiceType(MyPluginConstants.MY_SERVICE_TYPE);
             recorder.recordApi(descriptor);
             recorder.recordException(throwable);
-            
-            // Cast to the accessor type to get the value.
-            String producerName = ((ProducerNameAccessor)arg0)._$PINPOINT$_getProducerName();
-            recorder.recordAttribute(MyPluginConstants.ANNOTATION_KEY_MY_VALUE, producerName);
         } finally {
             trace.traceBlockEnd();
         }

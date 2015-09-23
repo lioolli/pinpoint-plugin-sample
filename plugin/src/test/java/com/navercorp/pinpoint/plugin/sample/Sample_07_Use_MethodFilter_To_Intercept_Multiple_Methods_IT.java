@@ -26,47 +26,40 @@ import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.target.TargetClass6;
+import com.navercorp.plugin.sample.target.TargetClass07;
 
 /**
  * Intercept public methods by using {@link MethodFilter}
  * 
- * @see MyPlugin#sample6_Use_MethodFilter_To_Intercept_Multiple_Methods(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
+ * @see MyPlugin#sample6_Use_MethodFilter_To_Intercept_Multiple_Methods(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
-@Dependency({"com.navercorp.pinpoint:plugin-sample-target:[1.0.0,)", "log4j:log4j:1.2.17"})
-public class Sample6_Use_MethodFilter_To_Intercept_Multiple_Methods_IT {
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
+public class Sample_07_Use_MethodFilter_To_Intercept_Multiple_Methods_IT {
 
     @Test
     public void test() throws Exception {
-        String name = "Pinpoint";
-
-        TargetClass6 target = new TargetClass6();
-        target.publicMethod();
-        target.publicMethod(name);
+        TargetClass07 target = new TargetClass07();
         
-        Method publicMethod1 = TargetClass6.class.getDeclaredMethod("publicMethod");
-        Method publicMethod2 = TargetClass6.class.getDeclaredMethod("publicMethod", String.class);
-        Method protectedMethod = TargetClass6.class.getDeclaredMethod("protectedMethod");
-        Method privateMethod = TargetClass6.class.getDeclaredMethod("privateMethod");
-        Method packagePrivateMethod = TargetClass6.class.getDeclaredMethod("packagePrivateMethod");
+        target.recordMe();
+        target.recordMe(0);
+        target.recordMe("maru");
         
-        protectedMethod.setAccessible(true);
-        protectedMethod.invoke(target);
+        target.logMe();
+        target.logMe("morae");
         
-        privateMethod.setAccessible(true);
-        privateMethod.invoke(target);
-        
-        packagePrivateMethod.setAccessible(true);
-        packagePrivateMethod.invoke(target);
+        Method recordMe0 = TargetClass07.class.getDeclaredMethod("recordMe");
+        Method recordMe1 = TargetClass07.class.getDeclaredMethod("recordMe", int.class);
+        Method recordMe2 = TargetClass07.class.getDeclaredMethod("recordMe", String.class);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        verifier.verifyTrace(Expectations.event("PluginExample", publicMethod1));
-        verifier.verifyTrace(Expectations.event("PluginExample", publicMethod2));
+        verifier.verifyTrace(Expectations.event("PluginExample", recordMe0));
+        verifier.verifyTrace(Expectations.event("PluginExample", recordMe1));
+        verifier.verifyTrace(Expectations.event("PluginExample", recordMe2));
         
         // no more traces
         verifier.verifyTraceCount(0);

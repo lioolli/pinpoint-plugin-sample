@@ -1,6 +1,6 @@
-package com.navercorp.target;
+package com.navercorp.plugin.sample.target;
 
-public class TargetClass4 {
+public class TargetClass04 {
     private int sum = 0;
 
     public void outerMethod(String name) {

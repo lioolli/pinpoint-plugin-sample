@@ -12,44 +12,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample.interceptor;
+package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing;
 
-import com.navercorp.pinpoint.bootstrap.interceptor.SimpleAroundInterceptor;
+import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor0;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
-import com.navercorp.pinpoint.bootstrap.logging.PLogger;
-import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.plugin.sample.MyAttachment;
-import com.navercorp.pinpoint.plugin.sample.MyPlugin;
 
 /**
- * This interceptor uses {@link InterceptorGroupInvocation} attachment to pass data to {@link Sample4_OuterMethodInterceptor}
- * 
- * @see MyPlugin#sample4_Interceptors_In_A_Group_Share_Value(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
- * @author Jongho Moon
+ * This interceptor uses {@link InterceptorGroupInvocation} attachment to pass data to {@link OuterMethodInterceptor}
  */
-public class Sample4_InnerMethodInterceptor implements SimpleAroundInterceptor {
-
-    private final PLogger logger = PLoggerFactory.getLogger(getClass());
-    private final boolean isDebug = logger.isDebugEnabled();
-
+public class InnerMethodInterceptor implements AfterInterceptor0 {
     private final InterceptorGroup group;
 
-    public Sample4_InnerMethodInterceptor(InterceptorGroup group) {
+    // An interceptor receives an InterceptorGroup through its constructor
+    public InnerMethodInterceptor(InterceptorGroup group) {
         this.group = group;
     }
     
     @Override
-    public void before(Object target, Object[] args) {
-        // do nothing
-    }
-
-    @Override
-    public void after(Object target, Object[] args, Object result, Throwable throwable) {
-        if (isDebug) {
-            logger.afterInterceptor(target, args);
-        }
-        
+    public void after(Object target, Object result, Throwable throwable) {
         MyAttachment attachment = (MyAttachment)group.getCurrentInvocation().getAttachment();
         
         if (attachment.isTrace()) {

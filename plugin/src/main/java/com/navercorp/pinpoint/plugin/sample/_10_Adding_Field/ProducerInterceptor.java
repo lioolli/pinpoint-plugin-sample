@@ -12,45 +12,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample.interceptor;
+package com.navercorp.pinpoint.plugin.sample._10_Adding_Field;
 
-import com.navercorp.pinpoint.bootstrap.MetadataAccessor;
-import com.navercorp.pinpoint.bootstrap.context.TraceContext;
-import com.navercorp.pinpoint.bootstrap.interceptor.MethodDescriptor;
-import com.navercorp.pinpoint.bootstrap.interceptor.SimpleAroundInterceptor;
-import com.navercorp.pinpoint.bootstrap.logging.PLogger;
-import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.bootstrap.plugin.annotation.Name;
-import com.navercorp.pinpoint.plugin.sample.MyPlugin;
-import com.navercorp.target.TargetClass8_Producer;
+import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor0;
+import com.navercorp.plugin.sample.target.TargetClass10_Producer;
 
-/**
- * @see MyPlugin#sample8_Inject_Metadata(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
- * @author Jongho Moon
- */
-public class Sample8_ProducerInterceptor implements SimpleAroundInterceptor {
-
-    private final PLogger logger = PLoggerFactory.getLogger(getClass());
-    private final boolean isDebug = logger.isDebugEnabled();
-
-    private final MetadataAccessor accessor;
-
-    public Sample8_ProducerInterceptor(TraceContext traceContext, MethodDescriptor descriptor, @Name("producerName") MetadataAccessor accessor) {
-        this.accessor = accessor;
-    }
-    
-    @Override
-    public void before(Object target, Object[] args) {
-        // do nothing
-    }
+public class ProducerInterceptor implements AfterInterceptor0 {
 
     @Override
-    public void after(Object target, Object[] args, Object result, Throwable throwable) {
-        if (isDebug) {
-            logger.afterInterceptor(target, args);
-        }
+    public void after(Object target, Object result, Throwable throwable) {
+        TargetClass10_Producer producer = (TargetClass10_Producer)target;
         
-        TargetClass8_Producer producer = (TargetClass8_Producer)target;
-        accessor.set(result, producer.getName());
+        // Cast to the accessor type to set the value.
+        ((ProducerNameAccessor)result)._$PINPOINT$_setProducerName(producer.getName());
     }
 }

@@ -12,25 +12,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing;
+package com.navercorp.plugin.sample.target;
 
-public class MyAttachment {
-    private boolean trace;
-    private Object value;
-    
-    public boolean isTrace() {
-        return trace;
+/**
+ * @author Jongho Moon
+ *
+ */
+public class TargetClass06 {
+    private final int value;
+
+    public TargetClass06() {
+        this(0);
     }
     
-    public void setTrace(boolean trace) {
-        this.trace = trace;
-    }
-    
-    public Object getValue() {
-        return value;
-    }
-    
-    public void setValue(Object value) {
+    public TargetClass06(int value) {
         this.value = value;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

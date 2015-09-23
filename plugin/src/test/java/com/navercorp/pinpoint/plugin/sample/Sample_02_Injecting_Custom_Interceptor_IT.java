@@ -26,28 +26,28 @@ import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.target.TargetClass2;
+import com.navercorp.plugin.sample.target.TargetClass02;
 
 /**
- * @see MyPlugin#sample2_Inject_Custom_Interceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
+ * @see MyPlugin#sample2_Inject_Custom_Interceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
-@Dependency({"com.navercorp.pinpoint:plugin-sample-target:[1.0.0,)", "log4j:log4j:1.2.17"})
-public class Sample2_Inject_Custom_Interceptor_IT {
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
+public class Sample_02_Injecting_Custom_Interceptor_IT {
 
     @Test
     public void test() throws Exception {
         String name = "Pinpoint";
 
-        TargetClass2 target = new TargetClass2();
+        TargetClass02 target = new TargetClass02();
         String hello = target.targetMethod(name);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        Method targetMethod = TargetClass2.class.getMethod("targetMethod", String.class);
+        Method targetMethod = TargetClass02.class.getMethod("targetMethod", String.class);
         
         ExpectedAnnotation[] args = Expectations.args(name);
         ExpectedAnnotation returnValue = Expectations.annotation("ReturnValue", hello);

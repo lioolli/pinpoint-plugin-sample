@@ -12,59 +12,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample.interceptor;
+package com.navercorp.pinpoint.plugin.sample._09_Adding_Getter;
 
-import com.navercorp.pinpoint.bootstrap.FieldAccessor;
+import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
-import com.navercorp.pinpoint.bootstrap.interceptor.MethodDescriptor;
-import com.navercorp.pinpoint.bootstrap.interceptor.SimpleAroundInterceptor;
-import com.navercorp.pinpoint.bootstrap.logging.PLogger;
-import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.bootstrap.plugin.annotation.Name;
-import com.navercorp.pinpoint.plugin.sample.MyPlugin;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
+import com.navercorp.pinpoint.plugin.sample.MyPluginConstants;
 
-/**
- * @see MyPlugin#sample7_Access_To_Fields(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
- * @author Jongho Moon
- */
-public class Sample7_RecordFieldInterceptor implements SimpleAroundInterceptor {
-
-    private final PLogger logger = PLoggerFactory.getLogger(getClass());
-    private final boolean isDebug = logger.isDebugEnabled();
-
+public class RecordFieldInterceptor implements AroundInterceptor {
     private final MethodDescriptor descriptor;
     private final TraceContext traceContext;
-    private final FieldAccessor accessor;
 
-    public Sample7_RecordFieldInterceptor(TraceContext traceContext, MethodDescriptor descriptor, @Name("hiddenField") FieldAccessor accessor) {
+    public RecordFieldInterceptor(TraceContext traceContext, MethodDescriptor descriptor) {
         this.descriptor = descriptor;
         this.traceContext = traceContext;
-        this.accessor = accessor;
     }
     
     @Override
     public void before(Object target, Object[] args) {
-        if (isDebug) {
-            logger.beforeInterceptor(target, args);
-        }
-
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
         }
 
         SpanEventRecorder recorder = trace.traceBlockBegin();
-        recorder.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
+        recorder.recordServiceType(MyPluginConstants.MY_SERVICE_TYPE);
     }
 
     @Override
-    public void after(Object target, Object[] args, Object result, Throwable throwable) {
-        if (isDebug) {
-            logger.afterInterceptor(target, args);
-        }
-
+    public void after(Object target, Object result, Throwable throwable, Object[] args) {
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
@@ -76,8 +54,9 @@ public class Sample7_RecordFieldInterceptor implements SimpleAroundInterceptor {
             recorder.recordApi(descriptor);
             recorder.recordException(throwable);
             
-            String fieldValue = accessor.get(target);
-            recorder.recordAttribute(MyPlugin.ANNOTATION_KEY_MY_VALUE, fieldValue);
+            // Cast the object of instrumented class to the getter type to get the value. 
+            String fieldValue = ((HiddenFieldGetter)target)._$PREFIX$_getValue();
+            recorder.recordAttribute(MyPluginConstants.ANNOTATION_KEY_MY_VALUE, fieldValue);
         } finally {
             trace.traceBlockEnd();
         }

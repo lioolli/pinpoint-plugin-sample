@@ -12,76 +12,129 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample.interceptor;
+package com.navercorp.pinpoint.plugin.sample._02_Injecting_Custom_Interceptor;
 
+import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
-import com.navercorp.pinpoint.bootstrap.interceptor.MethodDescriptor;
-import com.navercorp.pinpoint.bootstrap.interceptor.SimpleAroundInterceptor;
+import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor;
+import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor0;
+import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor1;
+import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor2;
+import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor3;
+import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor4;
+import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor5;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor0;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor2;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor3;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor4;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor5;
+import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor;
+import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor0;
+import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor1;
+import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor2;
+import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor3;
+import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor4;
+import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor5;
+import com.navercorp.pinpoint.bootstrap.interceptor.StaticAroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.plugin.sample.MyPlugin;
+import com.navercorp.pinpoint.plugin.sample.MyPluginConstants;
 
 /**
  * This interceptor shows how to record a method invocation with it's arguments and return value.
  * 
- * @see MyPlugin#example2_Inject_Custom_Interceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
- * @author Jongho Moon
+ * An interceptor have to implement one of following interfaces:
+ * 
+ * <li>{@link BeforeInterceptor}</li>
+ * <li>{@link BeforeInterceptor0}</li>
+ * <li>{@link BeforeInterceptor1}</li>
+ * <li>{@link BeforeInterceptor2}</li>
+ * <li>{@link BeforeInterceptor3}</li>
+ * <li>{@link BeforeInterceptor4}</li>
+ * <li>{@link BeforeInterceptor5}</li>
+ * <li>{@link AfterInterceptor}</li>
+ * <li>{@link AfterInterceptor0}</li>
+ * <li>{@link AfterInterceptor1}</li>
+ * <li>{@link AfterInterceptor2}</li>
+ * <li>{@link AfterInterceptor3}</li>
+ * <li>{@link AfterInterceptor4}</li>
+ * <li>{@link AfterInterceptor5}</li>
+ * <li>{@link AroundInterceptor}</li>
+ * <li>{@link AroundInterceptor0}</li>
+ * <li>{@link AroundInterceptor1}</li>
+ * <li>{@link AroundInterceptor2}</li>
+ * <li>{@link AroundInterceptor3}</li>
+ * <li>{@link AroundInterceptor4}</li>
+ * <li>{@link AroundInterceptor5}</li>
+ * <li>{@link StaticAroundInterceptor}</li>
+ * 
+ * Differences between these interfaces are, number of arguments the intercepter receives and at which point the target method is intercepted.  
+ * 
+ * This sample interceptor impelemnts AroundInterceptor1 which intercepts before and after the target method execution, and receives one argument of the method.
  */
-public class Sample2_RecordArgsAndReturnValueInterceptor implements SimpleAroundInterceptor {
-
-    // You'd better use PLogger for logging 
+public class RecordArgsAndReturnValueInterceptor implements AroundInterceptor1 {
+    // You have to use PLogger for logging because you don't know which logging library the target application uses. 
     private final PLogger logger = PLoggerFactory.getLogger(getClass());
     private final boolean isDebug = logger.isDebugEnabled();
 
     private final MethodDescriptor descriptor;
     private final TraceContext traceContext;
 
-    public Sample2_RecordArgsAndReturnValueInterceptor(TraceContext traceContext, MethodDescriptor descriptor) {
-        this.descriptor = descriptor;
+    // An interceptor receives Pinpoint objects as constructor arguments. 
+    public RecordArgsAndReturnValueInterceptor(TraceContext traceContext, MethodDescriptor descriptor) {
         this.traceContext = traceContext;
+        this.descriptor = descriptor;
     }
     
     @Override
-    public void before(Object target, Object[] args) {
+    public void before(Object target, Object arg0) {
         if (isDebug) {
-            logger.beforeInterceptor(target, args);
+            logger.beforeInterceptor(target, new Object[] { arg0 } );
         }
 
+        // 1. Get Trace. It's null when current transaction is not being profiled.
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
         }
 
+        // 2. Begin a trace block.
         trace.traceBlockBegin();
-        SpanEventRecorder recorder = trace.traceBlockBegin();
-        recorder.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
     }
 
     @Override
-    public void after(Object target, Object[] args, Object result, Throwable throwable) {
+    public void after(Object target, Object result, Throwable throwable, Object arg0) {
         if (isDebug) {
-            logger.afterInterceptor(target, args);
+            logger.afterInterceptor(target, new Object[] { arg0 });
         }
 
+        // 1. Get Trace.
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
         }
 
         try {
+            // 2. Get current span event recorder
             SpanEventRecorder recorder = trace.currentSpanEventRecorder();
 
-            // record method signature and arguments 
-            recorder.recordApi(descriptor, args);
+            // 3. Record service type
+            recorder.recordServiceType(MyPluginConstants.MY_SERVICE_TYPE);
             
-            // record exception if any.
+            // 4. record method signature and arguments 
+            recorder.recordApi(descriptor, new Object[] { arg0 });
+            
+            // 5. record exception if any.
             recorder.recordException(throwable);
             
-            // Trace doesn't provide a method to record return value. You have to record as an attribute.
-            recorder.recordAttribute(MyPlugin.ANNOTATION_KEY_RETURN_VALUE, result);
+            // 6. Trace doesn't provide a method to record return value. You have to record it as an attribute.
+            recorder.recordAttribute(MyPluginConstants.ANNOTATION_KEY_RETURN_VALUE, result);
         } finally {
+            // 7. End trace block.
             trace.traceBlockEnd();
         }
     }

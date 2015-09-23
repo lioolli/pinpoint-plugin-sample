@@ -12,25 +12,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing;
+package com.navercorp.pinpoint.plugin.sample._09_Adding_Getter;
 
-public class MyAttachment {
-    private boolean trace;
-    private Object value;
-    
-    public boolean isTrace() {
-        return trace;
-    }
-    
-    public void setTrace(boolean trace) {
-        this.trace = trace;
-    }
-    
-    public Object getValue() {
-        return value;
-    }
-    
-    public void setValue(Object value) {
-        this.value = value;
-    }
+/**
+ * Getter interface implemented by the target class.
+ * You'd better name methods uniquely to prevent duplication.
+ * 
+ * @author Jongho Moon
+ */
+public interface HiddenFieldGetter {
+    public String _$PREFIX$_getValue();
 }

@@ -12,29 +12,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample.interceptor;
+package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing;
 
+import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
-import com.navercorp.pinpoint.bootstrap.instrument.AttachmentFactory;
-import com.navercorp.pinpoint.bootstrap.interceptor.MethodDescriptor;
-import com.navercorp.pinpoint.bootstrap.interceptor.SimpleAroundInterceptor;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
+import com.navercorp.pinpoint.bootstrap.interceptor.group.AttachmentFactory;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
-import com.navercorp.pinpoint.bootstrap.logging.PLogger;
-import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.plugin.sample.MyAttachment;
-import com.navercorp.pinpoint.plugin.sample.MyPlugin;
+import com.navercorp.pinpoint.plugin.sample.MyPluginConstants;
 
 /**
  * This interceptor attach an object to current {@link InterceptorGroupInvocation}.
- * The attachment helps the interceptor collaborates with {@link Sample4_InnerMethodInterceptor}.
+ * The attachment helps the interceptor collaborates with {@link InnerMethodInterceptor}.
  * 
- * @see MyPlugin#example4_Interceptors_In_A_Group_Share_Value(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
+ * @see Sample_04_Interceptors_In_A_Group_Share_Value
  * @author Jongho Moon
  */
-public class Sample4_OuterMethodInterceptor implements SimpleAroundInterceptor {
+public class OuterMethodInterceptor implements AroundInterceptor1 {
     private static final AttachmentFactory ATTACHMENT_FACTORY = new AttachmentFactory() {
         
         @Override
@@ -43,51 +40,40 @@ public class Sample4_OuterMethodInterceptor implements SimpleAroundInterceptor {
         }
     };
     
-    private final PLogger logger = PLoggerFactory.getLogger(getClass());
-    private final boolean isDebug = logger.isDebugEnabled();
-
     private final MethodDescriptor descriptor;
     private final TraceContext traceContext;
     private final InterceptorGroup group;
 
-    public Sample4_OuterMethodInterceptor(TraceContext traceContext, MethodDescriptor descriptor, InterceptorGroup group) {
+    // An interceptor receives an InterceptorGroup through its constructor
+    public OuterMethodInterceptor(TraceContext traceContext, MethodDescriptor descriptor, InterceptorGroup group) {
         this.descriptor = descriptor;
         this.traceContext = traceContext;
         this.group = group;
     }
     
     @Override
-    public void before(Object target, Object[] args) {
-        if (isDebug) {
-            logger.beforeInterceptor(target, args);
-        }
-
+    public void before(Object target, Object arg0) {
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
         }
         
-        String arg0 = (String)args[0];
-        boolean shouldTrace = arg0.startsWith("FOO");
+        boolean shouldTrace = ((String)arg0).startsWith("FOO");
         
         if (!shouldTrace) {
             return;
         }
 
         SpanEventRecorder recorder = trace.traceBlockBegin();
-        recorder.recordServiceType(MyPlugin.MY_SERVICE_TYPE);
+        recorder.recordServiceType(MyPluginConstants.MY_SERVICE_TYPE);
 
-        // create attachment
+        // create or get attachment
         MyAttachment attachment = (MyAttachment)group.getCurrentInvocation().getOrCreateAttachment(ATTACHMENT_FACTORY);
         attachment.setTrace(shouldTrace);
     }
 
     @Override
-    public void after(Object target, Object[] args, Object result, Throwable throwable) {
-        if (isDebug) {
-            logger.afterInterceptor(target, args);
-        }
-
+    public void after(Object target, Object result, Throwable throwable, Object arg0) {
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
@@ -102,11 +88,11 @@ public class Sample4_OuterMethodInterceptor implements SimpleAroundInterceptor {
             
             SpanEventRecorder recorder = trace.currentSpanEventRecorder();
             
-            recorder.recordApi(descriptor, args);
+            recorder.recordApi(descriptor, new Object[] { arg0 });
             recorder.recordException(throwable);
             
-            // record the value set by Sample4_InnerMethodInterceptor
-            recorder.recordAttribute(MyPlugin.ANNOTATION_KEY_MY_VALUE, attachment.getValue());
+            // record the value set by InnerMethodInterceptor
+            recorder.recordAttribute(MyPluginConstants.ANNOTATION_KEY_MY_VALUE, attachment.getValue());
         } finally {
             trace.traceBlockEnd();
         }

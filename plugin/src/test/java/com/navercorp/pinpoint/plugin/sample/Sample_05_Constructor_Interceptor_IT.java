@@ -26,29 +26,29 @@ import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.target.TargetClass5;
+import com.navercorp.plugin.sample.target.TargetClass05;
 
 /**
- * @see MyPlugin#sample5_Intercept_Constructor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
+ * @see MyPlugin#sample5_Intercept_Constructor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
-@Dependency({"com.navercorp.pinpoint:plugin-sample-target:[1.0.0,)", "log4j:log4j:1.2.17"})
-public class Sample5_Intercept_Constructor_IT {
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
+public class Sample_05_Constructor_Interceptor_IT {
 
     @Test
     public void test() throws Exception {
         String name = "Pinpoint";
 
-        TargetClass5 target = new TargetClass5(name);
+        TargetClass05 target = new TargetClass05(name);
         target.getName();
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        Constructor<?> targetConstructor = TargetClass5.class.getConstructor(String.class);
-        verifier.verifyTrace(event("PluginExample", targetConstructor, args(name)));
+        Constructor<?> targetConstructor = TargetClass05.class.getConstructor(String.class);
+        verifier.verifyTrace(event("PluginExample", targetConstructor));
         
         
         // no more traces

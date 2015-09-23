@@ -1,13 +1,18 @@
-package com.navercorp.target;
+package com.navercorp.plugin.sample.target;
 
-public class TargetClass7 {
-    @SuppressWarnings("unused")
+public class TargetClass09 {
     private final String hiddenField;
 
-    public TargetClass7(String hiddenField) {
+    public TargetClass09(String hiddenField) {
         this.hiddenField = hiddenField;
     }
-
+    
     public void targetMethod() {
+        
+    }
+
+    @Override
+    public String toString() {
+        return "TargetClass09 [hiddenField=" + hiddenField + "]";
     }
 }

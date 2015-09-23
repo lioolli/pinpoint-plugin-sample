@@ -1,19 +1,24 @@
-package com.navercorp.target;
+package com.navercorp.plugin.sample.target;
 
-public class TargetClass6 {
-    public void publicMethod(String name) {
+public class TargetClass07 {
+    
+    public void recordMe() {
+        
     }
-
-    public void publicMethod() {
+    
+    public void recordMe(String arg) {
+        
     }
-
-    void packagePrivateMethod() {
+    
+    public void recordMe(int arg) {
+        
     }
-
-    protected void protectedMethod() {
+    
+    public void logMe() {
+        
     }
-
-    @SuppressWarnings("unused")
-    private void privateMethod() {
+    
+    public void logMe(String arg) {
+        
     }
 }

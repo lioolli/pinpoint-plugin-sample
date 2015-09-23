@@ -1,4 +1,4 @@
-package com.navercorp.target;
+package com.navercorp.plugin.sample.target;
 
-public class TargetClass8_Message {
+public class TargetClass10_Message {
 }

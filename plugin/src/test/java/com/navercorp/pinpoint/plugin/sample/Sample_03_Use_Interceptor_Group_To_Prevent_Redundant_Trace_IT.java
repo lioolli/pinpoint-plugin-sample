@@ -25,32 +25,32 @@ import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.target.TargetClass3;
+import com.navercorp.plugin.sample.target.TargetClass03;
 
 /**
- * Both {@link TargetClass3#targetMethodA()} and {@link TargetClass3#targetMethodB(int)} have been injected interceptors.
+ * Both {@link TargetClass03#targetMethodA()} and {@link TargetClass03#targetMethodB(int)} have been injected interceptors.
  * But those interceptors are in same interceptor group and their execution policy is BOUNDARY which means "execute only when no other interceptor in the same group is active".
- * (interceptor is active when it's before() is invoked but not after() yet)
+ * (interceptor is active when it's BEFORE() is invoked but not AFTER() yet)
  * 
- * So in {@link #testA()}, only {@link TargetClass3#tergetMethodA()} is recorded and in {@link #testB()}, only {@link TargetClass3#targetMethodB(int)} is recorded.
+ * So in {@link #testA()}, only {@link TargetClass03#tergetMethodA()} is recorded and in {@link #testB()}, only {@link TargetClass03#targetMethodB(int)} is recorded.
  * 
- * @see MyPlugin#sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext)
+ * @see MyPlugin#sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent("target/my-pinpoint-agent")
-@Dependency({"com.navercorp.pinpoint:plugin-sample-target:[1.0.0,)", "log4j:log4j:1.2.17"})
-public class Sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace_IT {
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
+public class Sample_03_Use_Interceptor_Group_To_Prevent_Redundant_Trace_IT {
 
     @Test
     public void testA() throws Exception {
-        TargetClass3 target = new TargetClass3();
+        TargetClass03 target = new TargetClass03();
         target.targetMethodA();
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        Method targetMethod = TargetClass3.class.getMethod("targetMethodA");
+        Method targetMethod = TargetClass03.class.getMethod("targetMethodA");
         verifier.verifyTrace(Expectations.event("PluginExample", targetMethod));
         
         // no more traces
@@ -59,13 +59,13 @@ public class Sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace_IT {
     
     @Test
     public void testB() throws Exception {
-        TargetClass3 target = new TargetClass3();
+        TargetClass03 target = new TargetClass03();
         target.targetMethodB(3);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        Method targetMethod = TargetClass3.class.getMethod("targetMethodB", int.class);
+        Method targetMethod = TargetClass03.class.getMethod("targetMethodB", int.class);
         verifier.verifyTrace(Expectations.event("PluginExample", targetMethod));
         
         // no more traces

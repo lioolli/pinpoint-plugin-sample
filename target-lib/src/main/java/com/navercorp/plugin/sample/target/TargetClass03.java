@@ -1,6 +1,6 @@
-package com.navercorp.target;
+package com.navercorp.plugin.sample.target;
 
-public class TargetClass3 {
+public class TargetClass03 {
     public void targetMethodA() {
         targetMethodB(10);
     }

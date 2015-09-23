@@ -1,8 +1,8 @@
-package com.navercorp.target;
+package com.navercorp.plugin.sample.target;
 
-import com.navercorp.target.TargetClass8_Message;
+import com.navercorp.plugin.sample.target.TargetClass10_Message;
 
-public class TargetClass8_Consumer {
-    public void consume(TargetClass8_Message obj) {
+public class TargetClass10_Consumer {
+    public void consume(TargetClass10_Message obj) {
     }
 }

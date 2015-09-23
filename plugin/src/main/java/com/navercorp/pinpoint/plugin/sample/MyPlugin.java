@@ -14,120 +14,56 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
-import static com.navercorp.pinpoint.common.trace.HistogramSchema.*;
-
-import java.lang.instrument.ClassFileTransformer;
-
-import com.navercorp.pinpoint.bootstrap.interceptor.group.ExecutionPolicy;
 import com.navercorp.pinpoint.bootstrap.plugin.ProfilerPlugin;
-import com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginContext;
-import com.navercorp.pinpoint.bootstrap.plugin.transformer.ClassFileTransformerBuilder;
-import com.navercorp.pinpoint.common.trace.AnnotationKey;
-import com.navercorp.pinpoint.common.trace.ServiceType;
+import com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext;
+import com.navercorp.pinpoint.plugin.sample._01_Injecting_BasicMethodInterceptor.Sample_01_Inject_BasicMethodInterceptor;
+import com.navercorp.pinpoint.plugin.sample._02_Injecting_Custom_Interceptor.Sample_02_Inject_Custom_Interceptor;
+import com.navercorp.pinpoint.plugin.sample._03_Interceptor_Group__Prevent_Duplicated_Trace.Sample_03_Use_Interceptor_Group_To_Prevent_Duplicated_Trace;
+import com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing.Sample_04_Interceptors_In_A_Group_Share_Value;
+import com.navercorp.pinpoint.plugin.sample._05_Constructor_Interceptor.Sample_05_Constructor_Interceptor;
+import com.navercorp.pinpoint.plugin.sample._06_Constructor_Interceptor_Group_Limitation.Sample_06_Constructor_Interceptor_Group_Limitation;
+import com.navercorp.pinpoint.plugin.sample._07_MethodFIlter.Sample_07_Use_MethodFilter_To_Intercept_Multiple_Methods;
+import com.navercorp.pinpoint.plugin.sample._08_Interceptor_Annotations.Sample_08_Interceptor_Annotations;
+import com.navercorp.pinpoint.plugin.sample._09_Adding_Getter.Sample_09_Adding_Getter;
+import com.navercorp.pinpoint.plugin.sample._10_Adding_Field.Sample_10_Adding_Field;
 
-/**
+/*
  * @author Jongho Moon
- *
+ * 
+ * Any Pinpoint profiler plugin must implement ProfilerPlugin interface.
+ * ProfilerPlugin declares only one method {@link #setup(ProfilerPluginSetupContext)}.
+ * You should implement the method to do whatever you need to setup your plugin with the passed ProfilerPluginSetupContext object.
+ * 
  */
 public class MyPlugin implements ProfilerPlugin {
-    public static final ServiceType MY_SERVICE_TYPE = ServiceType.of(5099, "PluginExample", NORMAL_SCHEMA);
     
-    public static final AnnotationKey ANNOTATION_KEY_MY_VALUE = new AnnotationKey(9998, "MyValue");
-    public static final AnnotationKey ANNOTATION_KEY_RETURN_VALUE = new AnnotationKey(9999, "ReturnValue");
-
     @Override
-    public void setup(ProfilerPluginContext context) {
-        sample1_Inject_BasicMethodInterceptor(context);
-        sample2_Inject_Custom_Interceptor(context);
-        sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace(context);
-        sample4_Interceptors_In_A_Group_Share_Value(context);
-        sample5_Intercept_Constructor(context);
-        sample6_Use_MethodFilter_To_Intercept_Multiple_Methods(context);
-        sample7_Access_To_Fields(context);
-        sample8_Inject_Metadata(context);
+    public void setup(ProfilerPluginSetupContext context) {
+        addApplicationTypeDetector(context);
+        addTransformers(context);
+    }
+
+    private void addTransformers(ProfilerPluginSetupContext context) {
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass01", new Sample_01_Inject_BasicMethodInterceptor());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass02", new Sample_02_Inject_Custom_Interceptor());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass03", new Sample_03_Use_Interceptor_Group_To_Prevent_Duplicated_Trace());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass04", new Sample_04_Interceptors_In_A_Group_Share_Value());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass05", new Sample_05_Constructor_Interceptor());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass06", new Sample_06_Constructor_Interceptor_Group_Limitation());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass07", new Sample_07_Use_MethodFilter_To_Intercept_Multiple_Methods());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass08", new Sample_08_Interceptor_Annotations());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass09", new Sample_09_Adding_Getter());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Producer", new Sample_10_Adding_Field.Producer());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Consumer", new Sample_10_Adding_Field.Consumer());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Message", new Sample_10_Adding_Field.Message());
+        
+        // TODO ObjectRecipe
+        // TODO root span
+        // TODO async
     }
     
-    /*
-     * Pinpiont provides BasicMethodInterceptor which records method invocation time and exception.
-     * This example shows how to inject it to a target method. It also shows how to pass constructor arguments to interceptor.
-     */
-    private void sample1_Inject_BasicMethodInterceptor(ProfilerPluginContext context) {
-        ClassFileTransformerBuilder builder = context.getClassFileTransformerBuilder("com.navercorp.target.TargetClass1");
-        builder.editMethod("targetMethod", "java.lang.String").injectInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", MY_SERVICE_TYPE);
-        
-        ClassFileTransformer transformer = builder.build();
-        context.addClassFileTransformer(transformer);
-    }
-
-    /*
-     *  You can inject a custom interceptor too.
-     */
-    private void sample2_Inject_Custom_Interceptor(ProfilerPluginContext context) {
-        ClassFileTransformerBuilder builder = context.getClassFileTransformerBuilder("com.navercorp.target.TargetClass2");
-        builder.editMethod("targetMethod", "java.lang.String").injectInterceptor("com.navercorp.pinpoint.plugin.sample.interceptor.Sample2_RecordArgsAndReturnValueInterceptor");
-        
-        ClassFileTransformer transformer = builder.build();
-        context.addClassFileTransformer(transformer);
-    }
-
-    private void sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace(ProfilerPluginContext context) {
-        ClassFileTransformerBuilder builder = context.getClassFileTransformerBuilder("com.navercorp.target.TargetClass3");
-        builder.editMethod("targetMethodA").injectInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", MY_SERVICE_TYPE).group("EXAMPLE_GROUP");
-        builder.editMethod("targetMethodB", "int").injectInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", MY_SERVICE_TYPE).group("EXAMPLE_GROUP");
-        
-        ClassFileTransformer transformer = builder.build();
-        context.addClassFileTransformer(transformer);
-    }
-
-    private void sample4_Interceptors_In_A_Group_Share_Value(ProfilerPluginContext context) {
-        ClassFileTransformerBuilder builder = context.getClassFileTransformerBuilder("com.navercorp.target.TargetClass4");
-        
-        builder.editMethod("outerMethod", "java.lang.String").injectInterceptor("com.navercorp.pinpoint.plugin.sample.interceptor.Sample4_OuterMethodInterceptor").group("EXAMPLE_GROUP");
-        builder.editMethod("innerMethod", "java.lang.String").injectInterceptor("com.navercorp.pinpoint.plugin.sample.interceptor.Sample4_InnerMethodInterceptor").group("EXAMPLE_GROUP", ExecutionPolicy.INTERNAL);;
-        
-        ClassFileTransformer transformer = builder.build();
-        context.addClassFileTransformer(transformer);
+    private void addApplicationTypeDetector(ProfilerPluginSetupContext context) {
+        // TODO
     }
     
-    private void sample5_Intercept_Constructor(ProfilerPluginContext context) {
-        ClassFileTransformerBuilder builder = context.getClassFileTransformerBuilder("com.navercorp.target.TargetClass5");
-        
-        builder.editConstructor("java.lang.String").injectInterceptor("com.navercorp.pinpoint.plugin.sample.interceptor.Sample5_RecordArgsInterceptor");
-        
-        ClassFileTransformer transformer = builder.build();
-        context.addClassFileTransformer(transformer);
-    }
-
-    private void sample6_Use_MethodFilter_To_Intercept_Multiple_Methods(ProfilerPluginContext context) {
-        ClassFileTransformerBuilder builder = context.getClassFileTransformerBuilder("com.navercorp.target.TargetClass6");
-        
-        builder.editMethods(new MyMethodFilter()).injectInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", MY_SERVICE_TYPE);
-        
-        ClassFileTransformer transformer = builder.build();
-        context.addClassFileTransformer(transformer);
-    }
-    
-    private void sample7_Access_To_Fields(ProfilerPluginContext context) {
-        ClassFileTransformerBuilder builder = context.getClassFileTransformerBuilder("com.navercorp.target.TargetClass7");
-        
-        builder.injectFieldAccessor("hiddenField");
-        builder.editMethod("targetMethod").injectInterceptor("com.navercorp.pinpoint.plugin.sample.interceptor.Sample7_RecordFieldInterceptor");
-        
-        ClassFileTransformer transformer = builder.build();
-        context.addClassFileTransformer(transformer);
-    }
-
-    private void sample8_Inject_Metadata(ProfilerPluginContext context) {
-        ClassFileTransformerBuilder producerTransformerBuilder = context.getClassFileTransformerBuilder("com.navercorp.target.TargetClass8_Producer");
-        producerTransformerBuilder.editMethod("produce").injectInterceptor("com.navercorp.pinpoint.plugin.sample.interceptor.Sample8_ProducerInterceptor");
-        context.addClassFileTransformer(producerTransformerBuilder.build());
-        
-        ClassFileTransformerBuilder messageTransformerBuilder = context.getClassFileTransformerBuilder("com.navercorp.target.TargetClass8_Message");
-        messageTransformerBuilder.injectMetadata("producerName");
-        context.addClassFileTransformer(messageTransformerBuilder.build());
-        
-        ClassFileTransformerBuilder consumerTransformerBuilder = context.getClassFileTransformerBuilder("com.navercorp.target.TargetClass8_Consumer");
-        consumerTransformerBuilder.editMethod("consume", "com.navercorp.target.TargetClass8_Message").injectInterceptor("com.navercorp.pinpoint.plugin.sample.interceptor.Sample8_ConsumerInterceptor");
-        context.addClassFileTransformer(consumerTransformerBuilder.build());
-    }
 }
