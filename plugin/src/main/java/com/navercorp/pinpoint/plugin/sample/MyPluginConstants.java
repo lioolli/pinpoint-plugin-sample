@@ -26,7 +26,6 @@ import com.navercorp.pinpoint.common.trace.ServiceType;
 public interface MyPluginConstants {
 
     public static final ServiceType MY_SERVICE_TYPE = ServiceType.of(5099, "PluginExample", NORMAL_SCHEMA);
-    public static final AnnotationKey ANNOTATION_KEY_MY_VALUE = new AnnotationKey(9998, "MyValue");
-    public static final AnnotationKey ANNOTATION_KEY_RETURN_VALUE = new AnnotationKey(9999, "ReturnValue");
+    public static final AnnotationKey ANNOTATION_KEY_MY_VALUE = new AnnotationKey(998, "MyValue");
 
 }

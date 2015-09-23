@@ -29,8 +29,6 @@ public class MyTraceMetadataProvider implements TraceMetadataProvider {
     @Override
     public void setup(TraceMetadataSetupContext context) {
         context.addServiceType(MyPluginConstants.MY_SERVICE_TYPE);
-        
-        context.addAnnotationKey(MyPluginConstants.ANNOTATION_KEY_RETURN_VALUE);
         context.addAnnotationKey(MyPluginConstants.ANNOTATION_KEY_MY_VALUE);
     }
 

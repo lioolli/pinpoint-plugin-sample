@@ -50,7 +50,7 @@ public class Sample_02_Injecting_Custom_Interceptor_IT {
         Method targetMethod = TargetClass02.class.getMethod("targetMethod", String.class);
         
         ExpectedAnnotation[] args = Expectations.args(name);
-        ExpectedAnnotation returnValue = Expectations.annotation("ReturnValue", hello);
+        ExpectedAnnotation returnValue = Expectations.annotation("RETURN_DATA", hello);
         
         verifier.verifyTrace(Expectations.event("PluginExample", targetMethod, args[0], returnValue));
         

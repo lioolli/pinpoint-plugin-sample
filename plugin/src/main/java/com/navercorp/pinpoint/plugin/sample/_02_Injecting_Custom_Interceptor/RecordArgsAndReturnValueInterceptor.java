@@ -42,6 +42,7 @@ import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor5;
 import com.navercorp.pinpoint.bootstrap.interceptor.StaticAroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
+import com.navercorp.pinpoint.common.trace.AnnotationKey;
 import com.navercorp.pinpoint.plugin.sample.MyPluginConstants;
 
 /**
@@ -132,7 +133,7 @@ public class RecordArgsAndReturnValueInterceptor implements AroundInterceptor1 {
             recorder.recordException(throwable);
             
             // 6. Trace doesn't provide a method to record return value. You have to record it as an attribute.
-            recorder.recordAttribute(MyPluginConstants.ANNOTATION_KEY_RETURN_VALUE, result);
+            recorder.recordAttribute(AnnotationKey.RETURN_DATA, result);
         } finally {
             // 7. End trace block.
             trace.traceBlockEnd();
