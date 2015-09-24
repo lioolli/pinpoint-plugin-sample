@@ -51,8 +51,8 @@ In test, you can use [PluginTestVerifier]() to check if traces are recorded corr
 
 PinointPluginTestSuite doesn't use the project's dependencies (configured at pom.xml). It uses dependencies listed by @Dependency. In this way, you can test multiple versions of the target library.
 
-### Test Dependency
-Dependencies are declared like this. You can specify versions or version ranges or a dependency.
+##### Test Dependency
+Dependencies are declared like this. You can specify versions or version ranges of a dependency.
 ```
 @Dependency({"some.group:some-artifact:1.0", "another.group:another-artifact:2.1-RELEASE"})
 @Dependency({"some.group:some-artifact:[1.0,)"})
@@ -61,5 +61,9 @@ Dependencies are declared like this. You can specify versions or version ranges 
 ```
 PinointPluginTestSuite searches dependencies from local repository and then maven central repository. You can add repositories by @Repository.
 
+##### Jvm Version
+You can specify the JVM version for a test by @JvmVersion.
 
+##### Application Test
+PinpointPluginTestSuite is not for an Application which has to be launched by its own main class. You can extends [AbstractPinpointPluginTestSuite](https://github.com/naver/pinpoint/blob/master/test/src/main/java/com/navercorp/pinpoint/test/plugin/AbstractPinpointPluginTestSuite.java) and related types to test such applications. 
 
