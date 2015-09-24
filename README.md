@@ -47,8 +47,19 @@ A PinpointClassFileTransformer transforms a target class by adding interceptors,
 # Integration Test
 You can run plugin integration tests with [PinointPluginTestSuite](https://github.com/naver/pinpoint/blob/master/test/src/main/java/com/navercorp/pinpoint/test/plugin/PinpointPluginTestSuite.java), a JUnit Runner. It downloads required dependencies from maven repositories and launch a new JVM with Pinpoint profiler agent and dependencies. On that JVM, JUnit tests are executed.
 
+In test, you can use [PluginTestVerifier]() to check if traces are recorded correctly.
+
 PinointPluginTestSuite doesn't use the project's dependencies (configured at pom.xml). It uses dependencies listed by @Dependency. In this way, you can test multiple versions of the target library.
 
-###
+### Test Dependency
+Dependencies are declared like this. You can specify versions or version ranges or a dependency.
+```
+@Dependency({"some.group:some-artifact:1.0", "another.group:another-artifact:2.1-RELEASE"})
+@Dependency({"some.group:some-artifact:[1.0,)"})
+@Dependency({"some.group:some-artifact:[1.0,1.9]"})
+@Dependency({"some.group:some-artifact:[1.0],[2.1],[3.2])"})
+```
+PinointPluginTestSuite searches dependencies from local repository and then maven central repository. You can add repositories by @Repository.
+
 
 
