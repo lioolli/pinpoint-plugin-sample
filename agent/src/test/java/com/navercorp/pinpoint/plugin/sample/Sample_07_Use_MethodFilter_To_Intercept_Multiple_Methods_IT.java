@@ -23,6 +23,7 @@ import com.navercorp.pinpoint.bootstrap.instrument.MethodFilter;
 import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample._08_Interceptor_Annotations.Sample_08_Interceptor_Annotations;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -31,11 +32,11 @@ import com.navercorp.plugin.sample.target.TargetClass07;
 /**
  * Intercept public methods by using {@link MethodFilter}
  * 
- * @see MyPlugin#sample6_Use_MethodFilter_To_Intercept_Multiple_Methods(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
+ * @see Sample_08_Interceptor_Annotations
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
 public class Sample_07_Use_MethodFilter_To_Intercept_Multiple_Methods_IT {
 

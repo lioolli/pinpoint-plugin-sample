@@ -23,17 +23,18 @@ import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample._05_Constructor_Interceptor.Sample_05_Constructor_Interceptor;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
 import com.navercorp.plugin.sample.target.TargetClass05;
 
 /**
- * @see MyPlugin#sample5_Intercept_Constructor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
+ * @see Sample_05_Constructor_Interceptor
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
 public class Sample_05_Constructor_Interceptor_IT {
 

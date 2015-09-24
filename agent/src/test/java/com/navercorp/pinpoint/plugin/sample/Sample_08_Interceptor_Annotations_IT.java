@@ -33,7 +33,7 @@ import com.navercorp.plugin.sample.target.TargetClass08;
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
 public class Sample_08_Interceptor_Annotations_IT {
 

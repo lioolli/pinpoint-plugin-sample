@@ -23,17 +23,18 @@ import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.ExpectedAnnotation;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample._02_Injecting_Custom_Interceptor.Sample_02_Inject_Custom_Interceptor;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
 import com.navercorp.plugin.sample.target.TargetClass02;
 
 /**
- * @see MyPlugin#sample2_Inject_Custom_Interceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
+ * @see Sample_02_Inject_Custom_Interceptor
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
 public class Sample_02_Injecting_Custom_Interceptor_IT {
 

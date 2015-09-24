@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample._10_Adding_Field.Sample_10_Adding_Field;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -35,11 +36,11 @@ import com.navercorp.plugin.sample.target.TargetClass10_Producer;
  * But we can not retrieve the producer name in the method. 
  * So we intercept {@link TargetClass10_Producer#produce()} to inject producer name into the returning {@link TargetClass10_Message}. 
  * 
- * @see MyPlugin#sample8_Inject_Metadata(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
+ * @see Sample_10_Adding_Field
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
 public class Sample_10_Adding_Field_IT {
 

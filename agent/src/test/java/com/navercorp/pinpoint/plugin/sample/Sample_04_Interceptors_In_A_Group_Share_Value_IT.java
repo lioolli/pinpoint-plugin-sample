@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing.Sample_04_Interceptors_In_A_Group_Share_Value;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -36,9 +37,11 @@ import com.navercorp.plugin.sample.target.TargetClass04;
  *  We can do this by sharing data as attachment of {@link InterceptorGroupInvocation}.
  *  When an InterceptorGroupInvocation is activated, interceptors in the group can share an attachment object.
  *  InterceptorGroupInvocation is activated when before() of any of interceptors in the group is invoked, but after() of it is not invoked.
+ *  
+ *  @see Sample_04_Interceptors_In_A_Group_Share_Value
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
 public class Sample_04_Interceptors_In_A_Group_Share_Value_IT {
 
