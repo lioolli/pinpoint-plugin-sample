@@ -44,4 +44,11 @@ A ProfilerPlugin adds [PinpointClassFileTransformer](https://github.com/naver/pi
 A PinpointClassFileTransformer transforms a target class by adding interceptors, getters and/or fields. You can find example codes in plugin-sample-plugin project.
 
 
-# Test
+# Integration Test
+You can run plugin integration tests with [PinointPluginTestSuite](https://github.com/naver/pinpoint/blob/master/test/src/main/java/com/navercorp/pinpoint/test/plugin/PinpointPluginTestSuite.java), a JUnit Runner. It downloads required dependencies from maven repositories and launch a new JVM with Pinpoint profiler agent and dependencies. On that JVM, JUnit tests are executed.
+
+PinointPluginTestSuite doesn't use the project's dependencies (configured at pom.xml). It uses dependencies listed by @Dependency. In this way, you can test multiple versions of the target library.
+
+###
+
+
