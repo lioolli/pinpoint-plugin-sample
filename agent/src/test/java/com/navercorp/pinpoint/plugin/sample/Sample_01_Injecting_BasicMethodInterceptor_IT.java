@@ -14,47 +14,41 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
-import static com.navercorp.pinpoint.bootstrap.plugin.test.Expectations.*;
-
 import java.lang.reflect.Method;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
+import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample._01_Injecting_BasicMethodInterceptor.Sample_01_Inject_BasicMethodInterceptor;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.plugin.sample.target.TargetClass04;
+import com.navercorp.plugin.sample.target.TargetClass01;
 
 /**
- *  We want to trace {@link TargetClass04#outerMethod(java.lang.String)} when it's argument starts with "FOO". 
- *  In addition, we want to record the return value of {@link TargetClass04#innerMethod(java.lang.String)} which is invoked by outerMethod() but don't want to record invocation of innerMethod().
- *  
- *  We can do this by sharing data as attachment of {@link InterceptorGroupInvocation}.
- *  When an InterceptorGroupInvocation is activated, interceptors in the group can share an attachment object.
- *  InterceptorGroupInvocation is activated when before() of any of interceptors in the group is invoked, but after() of it is not invoked.
+ * @see Sample_01_Inject_BasicMethodInterceptor
+ * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
-public class Sample_04_Interceptors_In_A_Group_Share_Value_IT {
+public class Sample_01_Injecting_BasicMethodInterceptor_IT {
 
     @Test
     public void test() throws Exception {
-        String name = "FOOBAR";
-        int length = name.length();
+        String name = "Pinpoint";
 
-        TargetClass04 target = new TargetClass04();
-        target.outerMethod(name);
+        TargetClass01 target = new TargetClass01();
+        target.targetMethod(name);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        Method targetMethod = TargetClass04.class.getMethod("outerMethod", String.class);
-        verifier.verifyTrace(event("PluginExample", targetMethod, args(name)[0], annotation("MyValue", length)));
+        Method targetMethod = TargetClass01.class.getMethod("targetMethod", String.class);
+        verifier.verifyTrace(Expectations.event("PluginExample", targetMethod));
         
         // no more traces
         verifier.verifyTraceCount(0);

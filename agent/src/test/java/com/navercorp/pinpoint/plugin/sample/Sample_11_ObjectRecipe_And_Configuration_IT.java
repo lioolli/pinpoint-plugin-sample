@@ -19,47 +19,39 @@ import java.lang.reflect.Method;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.navercorp.pinpoint.bootstrap.instrument.MethodFilter;
 import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
+import com.navercorp.pinpoint.test.plugin.PinpointConfig;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.plugin.sample.target.TargetClass07;
+import com.navercorp.plugin.sample.target.TargetClass11;
 
 /**
- * Intercept public methods by using {@link MethodFilter}
+ * This test uses @PinpointConfig to specify configuration file. 
  * 
- * @see MyPlugin#sample6_Use_MethodFilter_To_Intercept_Multiple_Methods(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
+ * @see Sample_11_ObjectRecipe_And_Configuration_IT
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
+@PinpointConfig("pinpoint-sample11.config")
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
-public class Sample_07_Use_MethodFilter_To_Intercept_Multiple_Methods_IT {
+public class Sample_11_ObjectRecipe_And_Configuration_IT {
 
     @Test
     public void test() throws Exception {
-        TargetClass07 target = new TargetClass07();
-        
-        target.recordMe();
-        target.recordMe(0);
-        target.recordMe("maru");
-        
-        target.logMe();
-        target.logMe("morae");
-        
-        Method recordMe0 = TargetClass07.class.getDeclaredMethod("recordMe");
-        Method recordMe1 = TargetClass07.class.getDeclaredMethod("recordMe", int.class);
-        Method recordMe2 = TargetClass07.class.getDeclaredMethod("recordMe", String.class);
+        String name = "Pinpoint";
+
+        TargetClass11 target = new TargetClass11();
+        target.hello(name);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        verifier.verifyTrace(Expectations.event("PluginExample", recordMe0));
-        verifier.verifyTrace(Expectations.event("PluginExample", recordMe1));
-        verifier.verifyTrace(Expectations.event("PluginExample", recordMe2));
+        Method hello = TargetClass11.class.getMethod("hello", String.class);
+        verifier.verifyTrace(Expectations.event("PluginExample", hello, Expectations.args("Pinpo...")));
         
         // no more traces
         verifier.verifyTraceCount(0);

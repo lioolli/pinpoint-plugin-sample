@@ -22,7 +22,7 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
 import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
 import com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor;
-import com.navercorp.pinpoint.plugin.sample.MyPluginConstants;
+import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 /**
  * Pinpiont provides {@link BasicMethodInterceptor} which records method execution time and exception.
@@ -39,7 +39,7 @@ public class Sample_01_Inject_BasicMethodInterceptor implements PinpointClassFil
         InstrumentMethod targetMethod = target.getDeclaredMethod("targetMethod", "java.lang.String");
         
         // 3. Add interceptor. The first argument is FQN of the interceptor class, followed by arguments for the interceptor's constructor.
-        targetMethod.addInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", MyPluginConstants.MY_SERVICE_TYPE);
+        targetMethod.addInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", SamplePluginConstants.MY_SERVICE_TYPE);
         
         // 4. Return resulting byte code.
         return target.toBytecode();

@@ -22,7 +22,7 @@ import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.AttachmentFactory;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
-import com.navercorp.pinpoint.plugin.sample.MyPluginConstants;
+import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 /**
  * This interceptor attach an object to current {@link InterceptorGroupInvocation}.
@@ -65,7 +65,7 @@ public class OuterMethodInterceptor implements AroundInterceptor1 {
         }
 
         SpanEventRecorder recorder = trace.traceBlockBegin();
-        recorder.recordServiceType(MyPluginConstants.MY_SERVICE_TYPE);
+        recorder.recordServiceType(SamplePluginConstants.MY_SERVICE_TYPE);
 
         // create or get attachment
         MyAttachment attachment = (MyAttachment)group.getCurrentInvocation().getOrCreateAttachment(ATTACHMENT_FACTORY);
@@ -92,7 +92,7 @@ public class OuterMethodInterceptor implements AroundInterceptor1 {
             recorder.recordException(throwable);
             
             // record the value set by InnerMethodInterceptor
-            recorder.recordAttribute(MyPluginConstants.ANNOTATION_KEY_MY_VALUE, attachment.getValue());
+            recorder.recordAttribute(SamplePluginConstants.ANNOTATION_KEY_MY_VALUE, attachment.getValue());
         } finally {
             trace.traceBlockEnd();
         }

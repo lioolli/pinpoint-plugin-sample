@@ -26,16 +26,16 @@ import com.navercorp.pinpoint.plugin.sample._07_MethodFIlter.Sample_07_Use_Metho
 import com.navercorp.pinpoint.plugin.sample._08_Interceptor_Annotations.Sample_08_Interceptor_Annotations;
 import com.navercorp.pinpoint.plugin.sample._09_Adding_Getter.Sample_09_Adding_Getter;
 import com.navercorp.pinpoint.plugin.sample._10_Adding_Field.Sample_10_Adding_Field;
+import com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.Sample_11_Configuration_And_ObjectRecipe;
 
-/*
- * @author Jongho Moon
- * 
+/**
  * Any Pinpoint profiler plugin must implement ProfilerPlugin interface.
  * ProfilerPlugin declares only one method {@link #setup(ProfilerPluginSetupContext)}.
  * You should implement the method to do whatever you need to setup your plugin with the passed ProfilerPluginSetupContext object.
  * 
+ * @author Jongho Moon
  */
-public class MyPlugin implements ProfilerPlugin {
+public class SamplePlugin implements ProfilerPlugin {
     
     @Override
     public void setup(ProfilerPluginSetupContext context) {
@@ -56,10 +56,11 @@ public class MyPlugin implements ProfilerPlugin {
         context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Producer", new Sample_10_Adding_Field.Producer());
         context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Consumer", new Sample_10_Adding_Field.Consumer());
         context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Message", new Sample_10_Adding_Field.Message());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass11", new Sample_11_Configuration_And_ObjectRecipe());
         
-        // TODO ObjectRecipe
-        // TODO root span
         // TODO async
+        // TODO root span
+        // TODO weave
     }
     
     private void addApplicationTypeDetector(ProfilerPluginSetupContext context) {

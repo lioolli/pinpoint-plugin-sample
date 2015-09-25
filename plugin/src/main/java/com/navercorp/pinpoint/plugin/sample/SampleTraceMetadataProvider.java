@@ -14,19 +14,22 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
-import static com.navercorp.pinpoint.common.trace.HistogramSchema.*;
-
-import com.navercorp.pinpoint.common.trace.AnnotationKey;
-import com.navercorp.pinpoint.common.trace.ServiceType;
+import com.navercorp.pinpoint.common.trace.TraceMetadataProvider;
+import com.navercorp.pinpoint.common.trace.TraceMetadataSetupContext;
 
 /**
  * @author Jongho Moon
  *
  */
-public interface MyPluginConstants {
+public class SampleTraceMetadataProvider implements TraceMetadataProvider {
 
-    public static final ServiceType MY_SERVICE_TYPE = ServiceType.of(5099, "PluginExample", NORMAL_SCHEMA);
-    public static final AnnotationKey ANNOTATION_KEY_MY_VALUE = new AnnotationKey(9998, "MyValue");
-    public static final AnnotationKey ANNOTATION_KEY_RETURN_VALUE = new AnnotationKey(9999, "ReturnValue");
+    /* (non-Javadoc)
+     * @see com.navercorp.pinpoint.common.trace.TraceMetadataProvider#setup(com.navercorp.pinpoint.common.trace.TraceMetadataSetupContext)
+     */
+    @Override
+    public void setup(TraceMetadataSetupContext context) {
+        context.addServiceType(SamplePluginConstants.MY_SERVICE_TYPE);
+        context.addAnnotationKey(SamplePluginConstants.ANNOTATION_KEY_MY_VALUE);
+    }
 
 }

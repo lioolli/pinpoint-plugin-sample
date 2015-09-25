@@ -16,51 +16,43 @@ package com.navercorp.pinpoint.plugin.sample;
 
 import static com.navercorp.pinpoint.bootstrap.plugin.test.Expectations.*;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample._06_Constructor_Interceptor_Group_Limitation.Sample_06_Constructor_Interceptor_Group_Limitation;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.plugin.sample.target.TargetClass10_Consumer;
-import com.navercorp.plugin.sample.target.TargetClass10_Message;
-import com.navercorp.plugin.sample.target.TargetClass10_Producer;
+import com.navercorp.plugin.sample.target.TargetClass06;
 
 /**
- * We want to trace {@link TargetClass10_Consumer#consume(TargetClass10_Message)} with producer name.
- * But we can not retrieve the producer name in the method. 
- * So we intercept {@link TargetClass10_Producer#produce()} to inject producer name into the returning {@link TargetClass10_Message}. 
- * 
- * @see MyPlugin#sample8_Inject_Metadata(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
+ * @see Sample_06_Constructor_Interceptor_Group_Limitation
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
-public class Sample_10_Adding_Field_IT {
-
+public class Sample_06_Constructor_Interceptor_Group_Limitation_IT {
+    
     @Test
     public void test() throws Exception {
-        String name = "Pinpoint";
+        // Invoke 0-arg constructor. It calls 1-arg constructor.
+        TargetClass06 target = new TargetClass06();
         
-        TargetClass10_Producer producer = new TargetClass10_Producer(name);
-        TargetClass10_Consumer consumer = new TargetClass10_Consumer();
-        
-        consumer.consume(producer.produce());
-
-
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        Method targetMethod = TargetClass10_Consumer.class.getMethod("consume", TargetClass10_Message.class);
+        Constructor<?> targetConstructor0 = TargetClass06.class.getConstructor();
+        Constructor<?> targetConstructor1 = TargetClass06.class.getConstructor(int.class);
+
+        // Unlike actual constructor invocation order, 1-arg constructor trace comes first. 
+        verifier.verifyTrace(event("PluginExample", targetConstructor1));
+        verifier.verifyTrace(event("PluginExample", targetConstructor0));
         
-        verifier.verifyTrace(event("PluginExample", targetMethod, annotation("MyValue", name)));
-        
-        // no more traces
         verifier.verifyTraceCount(0);
     }
 }

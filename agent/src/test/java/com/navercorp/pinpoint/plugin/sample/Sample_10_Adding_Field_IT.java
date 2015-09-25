@@ -14,44 +14,52 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
+import static com.navercorp.pinpoint.bootstrap.plugin.test.Expectations.*;
+
 import java.lang.reflect.Method;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample._08_Interceptor_Annotations.Sample_08_Interceptor_Annotations;
+import com.navercorp.pinpoint.plugin.sample._10_Adding_Field.Sample_10_Adding_Field;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.plugin.sample.target.TargetClass08;
+import com.navercorp.plugin.sample.target.TargetClass10_Consumer;
+import com.navercorp.plugin.sample.target.TargetClass10_Message;
+import com.navercorp.plugin.sample.target.TargetClass10_Producer;
 
 /**
- * @see Sample_08_Interceptor_Annotations
+ * We want to trace {@link TargetClass10_Consumer#consume(TargetClass10_Message)} with producer name.
+ * But we can not retrieve the producer name in the method. 
+ * So we intercept {@link TargetClass10_Producer#produce()} to inject producer name into the returning {@link TargetClass10_Message}. 
+ * 
+ * @see Sample_12_Asynchronous_Trace
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
-public class Sample_08_Interceptor_Annotations_IT {
+public class Sample_10_Adding_Field_IT {
 
     @Test
     public void test() throws Exception {
-        TargetClass08 target = new TargetClass08();
+        String name = "Pinpoint";
         
-        target.targetMethod("NAVER");
-        target.targetMethod();
+        TargetClass10_Producer producer = new TargetClass10_Producer(name);
+        TargetClass10_Consumer consumer = new TargetClass10_Consumer();
         
-        Method targetMethod0 = TargetClass08.class.getDeclaredMethod("targetMethod");
-        Method targetMethod1 = TargetClass08.class.getDeclaredMethod("targetMethod", String.class);
-        
+        consumer.consume(producer.produce());
+
+
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        verifier.verifyTrace(Expectations.event("PluginExample", targetMethod1));
-        verifier.verifyTrace(Expectations.event("PluginExample", targetMethod0));
+        Method targetMethod = TargetClass10_Consumer.class.getMethod("consume", TargetClass10_Message.class);
+        
+        verifier.verifyTrace(event("PluginExample", targetMethod, annotation("MyValue", name)));
         
         // no more traces
         verifier.verifyTraceCount(0);

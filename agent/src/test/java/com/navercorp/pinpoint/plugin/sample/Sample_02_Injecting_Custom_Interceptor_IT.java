@@ -14,42 +14,46 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
-import static com.navercorp.pinpoint.bootstrap.plugin.test.Expectations.*;
-
 import java.lang.reflect.Method;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
+import com.navercorp.pinpoint.bootstrap.plugin.test.ExpectedAnnotation;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample._09_Adding_Getter.Sample_09_Adding_Getter;
+import com.navercorp.pinpoint.plugin.sample._02_Injecting_Custom_Interceptor.Sample_02_Inject_Custom_Interceptor;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.plugin.sample.target.TargetClass09;
+import com.navercorp.plugin.sample.target.TargetClass02;
 
 /**
- * @see Sample_09_Adding_Getter
+ * @see Sample_02_Inject_Custom_Interceptor
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
-public class Sample_09_Adding_Getter_IT {
+public class Sample_02_Injecting_Custom_Interceptor_IT {
 
     @Test
     public void test() throws Exception {
         String name = "Pinpoint";
 
-        TargetClass09 target = new TargetClass09(name);
-        target.targetMethod();
+        TargetClass02 target = new TargetClass02();
+        String hello = target.targetMethod(name);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        Method targetMethod = TargetClass09.class.getMethod("targetMethod");
-        verifier.verifyTrace(event("PluginExample", targetMethod, annotation("MyValue", name)));
+        Method targetMethod = TargetClass02.class.getMethod("targetMethod", String.class);
+        
+        ExpectedAnnotation[] args = Expectations.args(name);
+        ExpectedAnnotation returnValue = Expectations.annotation("RETURN_DATA", hello);
+        
+        verifier.verifyTrace(Expectations.event("PluginExample", targetMethod, args[0], returnValue));
         
         // no more traces
         verifier.verifyTraceCount(0);

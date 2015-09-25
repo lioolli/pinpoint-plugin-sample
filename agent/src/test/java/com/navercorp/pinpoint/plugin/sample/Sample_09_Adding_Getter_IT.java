@@ -14,40 +14,42 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
+import static com.navercorp.pinpoint.bootstrap.plugin.test.Expectations.*;
+
 import java.lang.reflect.Method;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample._09_Adding_Getter.Sample_09_Adding_Getter;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.plugin.sample.target.TargetClass01;
+import com.navercorp.plugin.sample.target.TargetClass09;
 
 /**
- * @see MyPlugin#sample1_Inject_BasicMethodInterceptor(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
+ * @see Sample_09_Adding_Getter
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
-public class Sample_01_Injecting_BasicMethodInterceptor_IT {
+public class Sample_09_Adding_Getter_IT {
 
     @Test
     public void test() throws Exception {
         String name = "Pinpoint";
 
-        TargetClass01 target = new TargetClass01();
-        target.targetMethod(name);
+        TargetClass09 target = new TargetClass09(name);
+        target.targetMethod();
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        Method targetMethod = TargetClass01.class.getMethod("targetMethod", String.class);
-        verifier.verifyTrace(Expectations.event("PluginExample", targetMethod));
+        Method targetMethod = TargetClass09.class.getMethod("targetMethod");
+        verifier.verifyTrace(event("PluginExample", targetMethod, annotation("MyValue", name)));
         
         // no more traces
         verifier.verifyTraceCount(0);

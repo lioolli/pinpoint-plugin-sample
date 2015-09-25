@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
+import com.navercorp.pinpoint.plugin.sample._03_Interceptor_Group__Prevent_Duplicated_Trace.Sample_03_Use_Interceptor_Group_To_Prevent_Duplicated_Trace;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -34,13 +35,13 @@ import com.navercorp.plugin.sample.target.TargetClass03;
  * 
  * So in {@link #testA()}, only {@link TargetClass03#tergetMethodA()} is recorded and in {@link #testB()}, only {@link TargetClass03#targetMethodB(int)} is recorded.
  * 
- * @see MyPlugin#sample3_Use_Interceptor_Group_To_Prevent_Redundant_Trace(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
+ * @see Sample_03_Use_Interceptor_Group_To_Prevent_Duplicated_Trace
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
-public class Sample_03_Use_Interceptor_Group_To_Prevent_Redundant_Trace_IT {
+public class Sample_03_Use_Interceptor_Group_To_Prevent_Duplicated_Trace_IT {
 
     @Test
     public void testA() throws Exception {

@@ -14,45 +14,46 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
-import static com.navercorp.pinpoint.bootstrap.plugin.test.Expectations.*;
-
-import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample._06_Constructor_Interceptor_Group_Limitation.Sample_06_Constructor_Interceptor_Group_Limitation;
+import com.navercorp.pinpoint.plugin.sample._08_Interceptor_Annotations.Sample_08_Interceptor_Annotations;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.plugin.sample.target.TargetClass06;
+import com.navercorp.plugin.sample.target.TargetClass08;
 
 /**
- * @see Sample_06_Constructor_Interceptor_Group_Limitation
+ * @see Sample_08_Interceptor_Annotations
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
-@PinpointAgent("target/my-pinpoint-agent")
+@PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
-public class Sample_06_Constructor_Interceptor_Group_Limitation_IT {
-    
+public class Sample_08_Interceptor_Annotations_IT {
+
     @Test
     public void test() throws Exception {
-        // Invoke 0-arg constructor. It calls 1-arg constructor.
-        TargetClass06 target = new TargetClass06();
+        TargetClass08 target = new TargetClass08();
+        
+        target.targetMethod("NAVER");
+        target.targetMethod();
+        
+        Method targetMethod0 = TargetClass08.class.getDeclaredMethod("targetMethod");
+        Method targetMethod1 = TargetClass08.class.getDeclaredMethod("targetMethod", String.class);
         
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
         
-        Constructor<?> targetConstructor0 = TargetClass06.class.getConstructor();
-        Constructor<?> targetConstructor1 = TargetClass06.class.getConstructor(int.class);
-
-        // Unlike actual constructor invocation order, 1-arg constructor trace comes first. 
-        verifier.verifyTrace(event("PluginExample", targetConstructor1));
-        verifier.verifyTrace(event("PluginExample", targetConstructor0));
+        verifier.verifyTrace(Expectations.event("PluginExample", targetMethod1));
+        verifier.verifyTrace(Expectations.event("PluginExample", targetMethod0));
         
+        // no more traces
         verifier.verifyTraceCount(0);
     }
 }

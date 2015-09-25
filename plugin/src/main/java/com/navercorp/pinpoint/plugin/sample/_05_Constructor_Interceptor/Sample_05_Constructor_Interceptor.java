@@ -21,7 +21,7 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
 import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
-import com.navercorp.pinpoint.plugin.sample.MyPluginConstants;
+import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 /**
  * You can inject an interceptor to constructors too.
@@ -34,7 +34,7 @@ public class Sample_05_Constructor_Interceptor implements PinpointClassFileTrans
         
         // Note that getConstructor() returns InstrumentMethod
         InstrumentMethod targetConstructor = target.getConstructor("java.lang.String");
-        targetConstructor.addInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", MyPluginConstants.MY_SERVICE_TYPE);
+        targetConstructor.addInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", SamplePluginConstants.MY_SERVICE_TYPE);
         
         return target.toBytecode();
     }
