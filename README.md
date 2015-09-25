@@ -2,7 +2,7 @@
 You can extend Pinoint's profiling avility by writing a Pinpoint profiler plugin.
 This sample project shows how to write it.
 
-# Projects 
+# Modules 
 Pinpoint profiler plugin sample is consist of 3 modules
 
 * plugin-sample-target: target library
