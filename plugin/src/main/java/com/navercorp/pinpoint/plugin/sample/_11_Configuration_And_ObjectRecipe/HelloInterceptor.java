@@ -12,51 +12,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample._09_Adding_Getter;
+package com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe;
 
 import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
-import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
-public class RecordFieldInterceptor implements AroundInterceptor {
+/**
+ */
+public class HelloInterceptor implements AroundInterceptor1 {
     private final MethodDescriptor descriptor;
     private final TraceContext traceContext;
+    private final StringTrimmer trimmer;
 
-    public RecordFieldInterceptor(TraceContext traceContext, MethodDescriptor descriptor) {
-        this.descriptor = descriptor;
+    public HelloInterceptor(TraceContext traceContext, MethodDescriptor descriptor, StringTrimmer trimmer) {
         this.traceContext = traceContext;
+        this.descriptor = descriptor;
+        this.trimmer = trimmer;
     }
     
     @Override
-    public void before(Object target, Object[] args) {
+    public void before(Object target, Object arg0) {
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
         }
 
-        SpanEventRecorder recorder = trace.traceBlockBegin();
-        recorder.recordServiceType(SamplePluginConstants.MY_SERVICE_TYPE);
+        trace.traceBlockBegin();
     }
 
     @Override
-    public void after(Object target, Object result, Throwable throwable, Object[] args) {
+    public void after(Object target, Object result, Throwable throwable, Object arg0) {
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
         }
 
         try {
+            String stringArg = trimmer.trim((String)arg0);
+                    
             SpanEventRecorder recorder = trace.currentSpanEventRecorder();
-            
-            recorder.recordApi(descriptor);
+            recorder.recordServiceType(SamplePluginConstants.MY_SERVICE_TYPE);
+            recorder.recordApi(descriptor, new Object[] { stringArg });
             recorder.recordException(throwable);
-            
-            // Cast the object of instrumented class to the getter type to get the value. 
-            String fieldValue = ((HiddenFieldGetter)target)._$PREFIX$_getValue();
-            recorder.recordAttribute(SamplePluginConstants.ANNOTATION_KEY_MY_VALUE, fieldValue);
         } finally {
             trace.traceBlockEnd();
         }

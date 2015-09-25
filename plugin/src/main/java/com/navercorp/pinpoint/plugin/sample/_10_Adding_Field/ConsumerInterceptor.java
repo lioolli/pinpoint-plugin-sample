@@ -19,7 +19,7 @@ import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
-import com.navercorp.pinpoint.plugin.sample.MyPluginConstants;
+import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 public class ConsumerInterceptor implements AroundInterceptor1 {
     private final MethodDescriptor descriptor;
@@ -38,7 +38,7 @@ public class ConsumerInterceptor implements AroundInterceptor1 {
         }
 
         SpanEventRecorder recorder = trace.traceBlockBegin();
-        recorder.recordServiceType(MyPluginConstants.MY_SERVICE_TYPE);
+        recorder.recordServiceType(SamplePluginConstants.MY_SERVICE_TYPE);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ConsumerInterceptor implements AroundInterceptor1 {
             
             // Cast to the accessor type to get the value.
             String producerName = ((ProducerNameAccessor)arg0)._$PINPOINT$_getProducerName();
-            recorder.recordAttribute(MyPluginConstants.ANNOTATION_KEY_MY_VALUE, producerName);
+            recorder.recordAttribute(SamplePluginConstants.ANNOTATION_KEY_MY_VALUE, producerName);
         } finally {
             trace.traceBlockEnd();
         }

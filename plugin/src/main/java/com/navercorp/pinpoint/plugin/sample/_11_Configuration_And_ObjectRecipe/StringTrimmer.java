@@ -12,20 +12,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample;
-
-import static com.navercorp.pinpoint.common.trace.HistogramSchema.*;
-
-import com.navercorp.pinpoint.common.trace.AnnotationKey;
-import com.navercorp.pinpoint.common.trace.ServiceType;
+package com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe;
 
 /**
  * @author Jongho Moon
  *
  */
-public interface SamplePluginConstants {
+public class StringTrimmer {
+    private final int maxLen;
 
-    public static final ServiceType MY_SERVICE_TYPE = ServiceType.of(5099, "PluginExample", NORMAL_SCHEMA);
-    public static final AnnotationKey ANNOTATION_KEY_MY_VALUE = new AnnotationKey(998, "MyValue");
-
+    public StringTrimmer(int maxLen) {
+        this.maxLen = maxLen;
+    }
+    
+    public String trim(String str) {
+        if (str.length() > maxLen) {
+            return str.substring(0, maxLen - 3) + "...";
+        } else {
+            return str;
+        }
+    }
 }

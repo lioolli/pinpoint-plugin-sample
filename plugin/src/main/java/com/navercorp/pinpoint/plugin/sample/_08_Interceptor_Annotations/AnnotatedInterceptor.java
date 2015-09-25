@@ -22,7 +22,7 @@ import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor0;
 import com.navercorp.pinpoint.bootstrap.interceptor.annotation.Group;
 import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetMethod;
 import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetMethods;
-import com.navercorp.pinpoint.plugin.sample.MyPluginConstants;
+import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 /**
  * This interceptor declares its targets by @TargetMethods annotation and interceptor group by @Group annotation. 
@@ -63,7 +63,7 @@ public class AnnotatedInterceptor implements AroundInterceptor0 {
 
         try {
             SpanEventRecorder recorder = trace.currentSpanEventRecorder();
-            recorder.recordServiceType(MyPluginConstants.MY_SERVICE_TYPE);
+            recorder.recordServiceType(SamplePluginConstants.MY_SERVICE_TYPE);
             recorder.recordApi(descriptor);
             recorder.recordException(throwable);
         } finally {

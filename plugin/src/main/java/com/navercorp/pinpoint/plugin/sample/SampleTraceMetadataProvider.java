@@ -21,15 +21,15 @@ import com.navercorp.pinpoint.common.trace.TraceMetadataSetupContext;
  * @author Jongho Moon
  *
  */
-public class MyTraceMetadataProvider implements TraceMetadataProvider {
+public class SampleTraceMetadataProvider implements TraceMetadataProvider {
 
     /* (non-Javadoc)
      * @see com.navercorp.pinpoint.common.trace.TraceMetadataProvider#setup(com.navercorp.pinpoint.common.trace.TraceMetadataSetupContext)
      */
     @Override
     public void setup(TraceMetadataSetupContext context) {
-        context.addServiceType(MyPluginConstants.MY_SERVICE_TYPE);
-        context.addAnnotationKey(MyPluginConstants.ANNOTATION_KEY_MY_VALUE);
+        context.addServiceType(SamplePluginConstants.MY_SERVICE_TYPE);
+        context.addAnnotationKey(SamplePluginConstants.ANNOTATION_KEY_MY_VALUE);
     }
 
 }

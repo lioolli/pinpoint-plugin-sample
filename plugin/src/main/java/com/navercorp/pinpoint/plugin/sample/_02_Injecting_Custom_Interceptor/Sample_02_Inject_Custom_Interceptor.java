@@ -24,7 +24,7 @@ import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFile
 
 /**
  * Of course you can inject a custom interceptor.
- * See {@link RecordArgsAndReturnValueInterceptor} to learn how to write an interceptor.
+ * See {@link HelloInterceptor} to learn how to write an interceptor.
  */
 public class Sample_02_Inject_Custom_Interceptor implements PinpointClassFileTransformer {
 
