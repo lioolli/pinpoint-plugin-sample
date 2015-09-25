@@ -1,9 +1,5 @@
 # Pinpoint Profiler Plugin Sample
-You can extend Pinoint's profiling avility by writing a Pinpoint profiler plugin.
-This sample project shows how to write it.
-
-# Modules 
-Pinpoint profiler plugin sample is consist of 3 modules
+You can extend Pinoint's profiling avility by writing a Pinpoint profiler plugin. This sample project shows how to write it. It is consist of 3 modules:
 
 * plugin-sample-target: target library
 * plugin-sample-plugin: sample plugin
