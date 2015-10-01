@@ -27,6 +27,7 @@ import com.navercorp.pinpoint.plugin.sample._08_Interceptor_Annotations.Sample_0
 import com.navercorp.pinpoint.plugin.sample._09_Adding_Getter.Sample_09_Adding_Getter;
 import com.navercorp.pinpoint.plugin.sample._10_Adding_Field.Sample_10_Adding_Field;
 import com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.Sample_11_Configuration_And_ObjectRecipe;
+import com.navercorp.pinpoint.plugin.sample._12_Asynchronous_Trace.Sample_12_Asynchronous_Trace;
 
 /**
  * Any Pinpoint profiler plugin must implement ProfilerPlugin interface.
@@ -57,6 +58,9 @@ public class SamplePlugin implements ProfilerPlugin {
         context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Consumer", new Sample_10_Adding_Field.Consumer());
         context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Message", new Sample_10_Adding_Field.Message());
         context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass11", new Sample_11_Configuration_And_ObjectRecipe());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass12_AsyncInitiator", new Sample_12_Asynchronous_Trace.AsyncInitiator());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass12_Future", new Sample_12_Asynchronous_Trace.Future());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass12_Worker", new Sample_12_Asynchronous_Trace.Worker());
         
         // TODO async
         // TODO root span
