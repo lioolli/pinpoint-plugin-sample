@@ -35,7 +35,7 @@ import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetMethods;
  * Note that these are effective only when the interceptor is injected by one of {@link InstrumentClass}'s addInterceptor() or addGroupedInterceptor() method.
  * 
  * To specify interceptor group, use {@link Group}.
- * If another interceptor group is passed to addGroupedInterceptor(), the annotation will be ignored.
+ * If you pass other InterceptorGroup through addGroupedInterceptor(), the annotation will be ignored.
  * 
  * @see AnnotatedInterceptor
  */

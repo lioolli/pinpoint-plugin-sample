@@ -23,7 +23,19 @@ import com.navercorp.pinpoint.common.trace.ServiceType;
  */
 public interface SamplePluginConstants {
 
-    public static final ServiceType MY_SERVICE_TYPE = ServiceType.of(5099, "PluginExample");
+    public static final ServiceType MY_SERVICE_TYPE = ServiceType.of(7500, "PluginExample");
     public static final AnnotationKey ANNOTATION_KEY_MY_VALUE = new AnnotationKey(998, "MyValue");
+    
+    public static final ServiceType MY_RPC_CLIENT_SERVICE_TYPE = ServiceType.of(9901, "SAMPLE_CLIENT");
+    public static final AnnotationKey MY_RPC_ARGUMENT_ANNOTATION_KEY = new AnnotationKey(995, "MY_ARGUMENT");
+    public static final AnnotationKey MY_RPC_PROCEDURE_ANNOTATION_KEY = new AnnotationKey(996, "MY_PROCEDURE");
+    public static final AnnotationKey MY_RPC_RESULT_ANNOTATION_KEY = new AnnotationKey(997, "MY_RESULT");
 
+    public static final String META_TRANSACTION_ID = "_SAMPLE_TRASACTION_ID";
+    public static final String META_SPAN_ID = "_SAMPLE_SPAN_ID";
+    public static final String META_PARENT_SPAN_ID = "_SAMPLE_PARENT_SPAN_ID";
+    public static final String META_PARENT_APPLICATION_NAME = "_SAMPLE_PARENT_APPLICATION_NAME";
+    public static final String META_PARENT_APPLICATION_TYPE = "_SAMPLE_PARENT_APPLICATION_TYPE";
+    public static final String META_FLAGS = "_SAMPLE_FLAGS";
+    
 }

@@ -29,7 +29,7 @@ import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 /**
- * To trace a async invocation you have to
+ * To trace an async invocation you have to
  * 
  * 1. Intercept a method initiating an async task and issues a new {@link AsyncTraceId}.
  * 2. Pass the AsyncTraceId to the handler of the async task. 

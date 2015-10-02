@@ -23,35 +23,37 @@ import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample._09_Adding_Getter.Sample_09_Adding_Getter;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
-import com.navercorp.plugin.sample.target.TargetClass09;
+import com.navercorp.plugin.sample.target.TargetClass13_Client;
+import com.navercorp.plugin.sample.target.TargetClass13_Request;
 
 /**
- * @see Sample_13_RPC_Client
+ *  
+ * 
+ * @see Sample_13_RPC_Client_IT
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent(SampleTestConstants.AGENT_PATH)
 @Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
-public class Sample_09_Adding_Getter_IT {
+public class Sample_13_RPC_Client_IT {
 
     @Test
     public void test() throws Exception {
-        String name = "Pinpoint";
-
-        TargetClass09 target = new TargetClass09(name);
-        target.targetMethod();
+        TargetClass13_Client client = new TargetClass13_Client("1.2.3.4", 5678);
+        TargetClass13_Request request = new TargetClass13_Request("sample", "hello", "pinpoint");
         
+        client.sendRequest(request);
+        
+        Method sendRequest = TargetClass13_Client.class.getMethod("sendRequest", TargetClass13_Request.class);
+
         PluginTestVerifier verifier = PluginTestVerifierHolder.getInstance();
         verifier.printCache();
-        
-        Method targetMethod = TargetClass09.class.getMethod("targetMethod");
-        verifier.verifyTrace(event("PluginExample", targetMethod, annotation("MyValue", name)));
-        
-        // no more traces
+
+        verifier.verifyTrace(event("SAMPLE_CLIENT", sendRequest, null, "1.2.3.4:5678", "sample", annotation("MY_PROCEDURE", "hello"), annotation("MY_ARGUMENT", "pinpoint"), annotation("MY_RESULT", "SUCCESS")));
+
         verifier.verifyTraceCount(0);
     }
 }

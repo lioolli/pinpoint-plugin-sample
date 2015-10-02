@@ -28,6 +28,7 @@ import com.navercorp.pinpoint.plugin.sample._09_Adding_Getter.Sample_09_Adding_G
 import com.navercorp.pinpoint.plugin.sample._10_Adding_Field.Sample_10_Adding_Field;
 import com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.Sample_11_Configuration_And_ObjectRecipe;
 import com.navercorp.pinpoint.plugin.sample._12_Asynchronous_Trace.Sample_12_Asynchronous_Trace;
+import com.navercorp.pinpoint.plugin.sample._13_RPC_Client.Sample_13_RPC_Client;
 
 /**
  * Any Pinpoint profiler plugin must implement ProfilerPlugin interface.
@@ -61,9 +62,10 @@ public class SamplePlugin implements ProfilerPlugin {
         context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass12_AsyncInitiator", new Sample_12_Asynchronous_Trace.AsyncInitiator());
         context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass12_Future", new Sample_12_Asynchronous_Trace.Future());
         context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass12_Worker", new Sample_12_Asynchronous_Trace.Worker());
+        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass13_Client", new Sample_13_RPC_Client());
         
-        // TODO async
         // TODO root span
+        // TODO client span
         // TODO weave
     }
     
