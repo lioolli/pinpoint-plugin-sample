@@ -14,8 +14,6 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
-import static com.navercorp.pinpoint.common.trace.HistogramSchema.*;
-
 import com.navercorp.pinpoint.common.trace.AnnotationKey;
 import com.navercorp.pinpoint.common.trace.ServiceType;
 
@@ -25,7 +23,7 @@ import com.navercorp.pinpoint.common.trace.ServiceType;
  */
 public interface SamplePluginConstants {
 
-    public static final ServiceType MY_SERVICE_TYPE = ServiceType.of(5099, "PluginExample", NORMAL_SCHEMA);
+    public static final ServiceType MY_SERVICE_TYPE = ServiceType.of(5099, "PluginExample");
     public static final AnnotationKey ANNOTATION_KEY_MY_VALUE = new AnnotationKey(998, "MyValue");
 
 }
