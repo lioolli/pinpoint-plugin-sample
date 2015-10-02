@@ -25,8 +25,10 @@ Both ServiceType and AnnotationKey's code value must be unique. If you're writin
 
 * ServiceType codes for private use
   * Server: 1900 ~ 1999
-  * Client: 9900 ~ 9999
-  * Others: 10000 ~ 10999
+  * DB client: 2900 ~ 2999
+  * Cache client: 8999 ~ 8999
+  * RPC client: 9900 ~ 9999
+  * Others: 7500 ~ 7999
 
 * AnnotaionKey codes for private use
   * 900 ~ 999
@@ -62,5 +64,5 @@ PinointPluginTestSuite searches dependencies from local repository and maven cen
 You can specify the JVM version for a test by @JvmVersion.
 
 #### Application Test
-PinpointPluginTestSuite is not for an Application which has to be launched by its own main class. You can extends [AbstractPinpointPluginTestSuite](https://github.com/naver/pinpoint/blob/master/test/src/main/java/com/navercorp/pinpoint/test/plugin/AbstractPinpointPluginTestSuite.java) and related types to test such applications. 
+PinpointPluginTestSuite is not for an application which has to be launched by its own main class. You can extends [AbstractPinpointPluginTestSuite](https://github.com/naver/pinpoint/blob/master/test/src/main/java/com/navercorp/pinpoint/test/plugin/AbstractPinpointPluginTestSuite.java) and related types to test such applications. 
 
