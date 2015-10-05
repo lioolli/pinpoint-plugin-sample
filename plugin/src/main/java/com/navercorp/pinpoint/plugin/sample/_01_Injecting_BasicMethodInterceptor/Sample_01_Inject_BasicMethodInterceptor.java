@@ -24,6 +24,8 @@ import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFile
 import com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
+import static com.navercorp.pinpoint.common.util.VarArgs.va;
+
 /**
  * Pinpiont provides {@link BasicMethodInterceptor} which records method execution time and exception.
  * This example shows how to inject it to a method. It also shows how to pass constructor arguments to the interceptor.
@@ -39,7 +41,7 @@ public class Sample_01_Inject_BasicMethodInterceptor implements PinpointClassFil
         InstrumentMethod targetMethod = target.getDeclaredMethod("targetMethod", "java.lang.String");
         
         // 3. Add interceptor. The first argument is FQN of the interceptor class, followed by arguments for the interceptor's constructor.
-        targetMethod.addInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", SamplePluginConstants.MY_SERVICE_TYPE);
+        targetMethod.addInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", va(SamplePluginConstants.MY_SERVICE_TYPE));
         
         // 4. Return resulting byte code.
         return target.toBytecode();

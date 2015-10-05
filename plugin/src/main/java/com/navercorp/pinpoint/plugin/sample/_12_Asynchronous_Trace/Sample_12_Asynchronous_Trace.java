@@ -28,6 +28,8 @@ import com.navercorp.pinpoint.bootstrap.interceptor.group.ExecutionPolicy;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
+import static com.navercorp.pinpoint.common.util.VarArgs.va;
+
 /**
  * To trace an async invocation you have to
  * 
@@ -84,7 +86,7 @@ public class Sample_12_Asynchronous_Trace {
             InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
             
             InstrumentMethod get = target.getDeclaredMethod("get");
-            get.addInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", SamplePluginConstants.MY_SERVICE_TYPE);
+            get.addInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", va(SamplePluginConstants.MY_SERVICE_TYPE));
 
             return target.toBytecode();
         }
