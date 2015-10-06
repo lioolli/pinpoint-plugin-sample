@@ -14,12 +14,14 @@
  */
 package com.navercorp.pinpoint.plugin.sample._13_RPC_Client;
 
+import com.navercorp.pinpoint.bootstrap.context.Header;
 import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.context.TraceId;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
+import com.navercorp.pinpoint.bootstrap.sampler.SamplingFlagUtils;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 import com.navercorp.plugin.sample.target.TargetClass13_Request;
 
@@ -37,7 +39,7 @@ public class SendRequestInterceptor implements AroundInterceptor1 {
         this.descriptor = descriptor;
         this.traceContext = traceContext;
     }
-    
+
     @Override
     public void before(Object target, Object arg0) {
         Trace trace = traceContext.currentTraceObject();
@@ -45,29 +47,33 @@ public class SendRequestInterceptor implements AroundInterceptor1 {
             return;
         }
 
-        SpanEventRecorder recorder = trace.traceBlockBegin();
-        
-        // RPC call trace have to be recorded with a service code in RPC client code range. 
-        recorder.recordServiceType(SamplePluginConstants.MY_RPC_CLIENT_SERVICE_TYPE);
-        
-        // You have to issue a TraceId the receiver of this request will use.
-        TraceId nextId = trace.getTraceId().getNextTraceId();
-        
-        // Then record it as next span id.
-        recorder.recordNextSpanId(nextId.getSpanId());
-        
-        
-        TargetClass13_Request request = (TargetClass13_Request)arg0;
-        
-        // Finally, pass some tracing data to the server.
-        // How to put them in a message is protocol specific.
-        // This example assumes that the target protocol message can include any metadata (like HTTP headers).
-        request.addMetadata(SamplePluginConstants.META_TRANSACTION_ID, nextId.getTransactionId());
-        request.addMetadata(SamplePluginConstants.META_SPAN_ID, Long.toString(nextId.getSpanId()));
-        request.addMetadata(SamplePluginConstants.META_PARENT_SPAN_ID, Long.toString(nextId.getParentSpanId()));
-        request.addMetadata(SamplePluginConstants.META_PARENT_APPLICATION_TYPE, Short.toString(traceContext.getServerTypeCode()));
-        request.addMetadata(SamplePluginConstants.META_PARENT_APPLICATION_NAME, traceContext.getApplicationName());
-        request.addMetadata(SamplePluginConstants.META_FLAGS, Short.toString(nextId.getFlags()));
+        TargetClass13_Request request = (TargetClass13_Request) arg0;
+
+        if (trace.canSampled()) {
+            SpanEventRecorder recorder = trace.traceBlockBegin();
+
+            // RPC call trace have to be recorded with a service code in RPC client code range.
+            recorder.recordServiceType(SamplePluginConstants.MY_RPC_CLIENT_SERVICE_TYPE);
+
+            // You have to issue a TraceId the receiver of this request will use.
+            TraceId nextId = trace.getTraceId().getNextTraceId();
+
+            // Then record it as next span id.
+            recorder.recordNextSpanId(nextId.getSpanId());
+
+            // Finally, pass some tracing data to the server.
+            // How to put them in a message is protocol specific.
+            // This example assumes that the target protocol message can include any metadata (like HTTP headers).
+            request.addMetadata(SamplePluginConstants.META_TRANSACTION_ID, nextId.getTransactionId());
+            request.addMetadata(SamplePluginConstants.META_SPAN_ID, Long.toString(nextId.getSpanId()));
+            request.addMetadata(SamplePluginConstants.META_PARENT_SPAN_ID, Long.toString(nextId.getParentSpanId()));
+            request.addMetadata(SamplePluginConstants.META_PARENT_APPLICATION_TYPE, Short.toString(traceContext.getServerTypeCode()));
+            request.addMetadata(SamplePluginConstants.META_PARENT_APPLICATION_NAME, traceContext.getApplicationName());
+            request.addMetadata(SamplePluginConstants.META_FLAGS, Short.toString(nextId.getFlags()));
+        } else {
+            // If sampling this transaction is disabled, pass only that infomation to the server.  
+            request.addMetadata(SamplePluginConstants.META_DO_NOT_TRACE, "1");
+        }
     }
 
     @Override
@@ -79,16 +85,16 @@ public class SendRequestInterceptor implements AroundInterceptor1 {
 
         try {
             SpanEventRecorder recorder = trace.currentSpanEventRecorder();
-            
+
             recorder.recordApi(descriptor);
-            
+
             if (throwable == null) {
-                // RPC client have to record end point (server address) 
-                String serverAddress = ((ServerAddressGetter)target)._$PREFIX$_getServerAddress();
-                int port = ((ServerPortGetter)target)._$PREFIX$_getServerPort();
+                // RPC client have to record end point (server address)
+                String serverAddress = ((ServerAddressGetter) target)._$PREFIX$_getServerAddress();
+                int port = ((ServerPortGetter) target)._$PREFIX$_getServerPort();
                 recorder.recordEndPoint(serverAddress + ":" + port);
-                
-                TargetClass13_Request request = (TargetClass13_Request)arg0;
+
+                TargetClass13_Request request = (TargetClass13_Request) arg0;
                 // Optionally, record the destination id (logical name of server. e.g. DB name)
                 recorder.recordDestinationId(request.getNamespace());
                 recorder.recordAttribute(SamplePluginConstants.MY_RPC_PROCEDURE_ANNOTATION_KEY, request.getProcedure());
