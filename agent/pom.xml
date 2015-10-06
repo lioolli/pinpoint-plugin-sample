@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>plugin-sample-agent</artifactId>
-    <name>naver-pinpoint-sample-agent-distribution</name>
+    <name>Pinpoint Plugin Sample Agent Distribution</name>
     <packaging>jar</packaging>
 
     <properties>

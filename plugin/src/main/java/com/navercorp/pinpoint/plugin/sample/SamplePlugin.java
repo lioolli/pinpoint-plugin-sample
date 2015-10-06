@@ -67,8 +67,11 @@ public class SamplePlugin implements ProfilerPlugin {
         context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass14_Server", new Sample_14_RPC_Server());
     }
     
+    /**
+     * Pinpoint profiler agent uses this detector to find out the service type of current application.
+     */
     private void addApplicationTypeDetector(ProfilerPluginSetupContext context) {
-        // TODO
+        context.addApplicationTypeDetector(new SampleServerDetector());
     }
     
 }
