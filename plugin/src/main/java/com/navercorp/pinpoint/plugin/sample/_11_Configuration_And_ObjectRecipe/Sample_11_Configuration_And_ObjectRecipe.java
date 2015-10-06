@@ -54,7 +54,7 @@ public class Sample_11_Configuration_And_ObjectRecipe implements PinpointClassFi
         // targetMethod.addInterceptor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.HelloInterceptor", new StringTrimmer(maxLen));
         
         ObjectRecipe trimmerRecipe = ObjectRecipe.byConstructor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.StringTrimmer", maxLen);
-        targetMethod.addInterceptor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.HelloInterceptor", va(trimmerRecipe));
+        targetMethod.addInterceptor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.HelloInterceptor", new Object[] { trimmerRecipe });
 
         return target.toBytecode();
     }
