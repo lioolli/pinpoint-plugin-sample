@@ -28,32 +28,41 @@ import com.navercorp.plugin.sample.target.TargetClass14_Request;
 import com.navercorp.plugin.sample.target.TargetClass14_Server;
 
 /**
- * This interceptor shows how to records a RPC call and pass tracing data to the server.
+ * You'd better extends {@link SpanSimpleAroundInterceptor} to write a server application interceptor.
  * 
  * @author Jongho Moon
- *
  */
 public class ProcessInterceptor extends SpanSimpleAroundInterceptor {
     public ProcessInterceptor(TraceContext traceContext, MethodDescriptor descriptor) {
         super(traceContext, descriptor, ProcessInterceptor.class);
     }
     
-    
+
+    /**
+     * In this method, you have to check if the current request contains following informations:
+     * 
+     * 1. Marker that indicates this transaction must not be traced
+     * 2. Data required to continue tracing a transaction. transaction id, paraent id and so on. 
+     * 
+     * Then you have to create appropriate Trace object.
+     */
     @Override
     protected Trace createTrace(Object target, Object[] args) {
         TargetClass14_Request request = (TargetClass14_Request)args[0];
         
-        // If this transaction is not traceable, return immediately.
+        // If this transaction is not traceable, mark as disabled.
         if (request.getMetadata(SamplePluginConstants.META_DO_NOT_TRACE) != null) {
             return traceContext.disableSampling();
         }
         
         String transactionId = request.getMetadata(SamplePluginConstants.META_TRANSACTION_ID);
-        
+
+        // If there's no trasanction id, a new trasaction begins here. 
         if (transactionId == null) {
             return traceContext.newTraceObject();
         }
-            
+
+        // otherwise, continue tracing with given data.
         long parentSpanID = NumberUtils.parseLong(request.getMetadata(SamplePluginConstants.META_PARENT_SPAN_ID), SpanId.NULL);
         long spanID = NumberUtils.parseLong(request.getMetadata(SamplePluginConstants.META_SPAN_ID), SpanId.NULL);
         short flags = NumberUtils.parseShort(request.getMetadata(SamplePluginConstants.META_FLAGS), (short) 0);
@@ -68,13 +77,18 @@ public class ProcessInterceptor extends SpanSimpleAroundInterceptor {
         TargetClass14_Server server = (TargetClass14_Server)target;
         TargetClass14_Request request = (TargetClass14_Request)args[0];
         
+        // You have to record a service type within Server range. 
         recorder.recordServiceType(SamplePluginConstants.MY_RPC_SERVER_SERVICE_TYPE);
+        
+        // Record rpc name, client address, server address.
         recorder.recordRpcName(request.getProcedure());
         recorder.recordEndPoint(server.getAddress());
         recorder.recordRemoteAddress(request.getClientAddress());
 
+        // If this transaction did not begin here, record parent(client who sent this request) information 
         if (!recorder.isRoot()) {
             String parentApplicationName = request.getMetadata(SamplePluginConstants.META_PARENT_APPLICATION_NAME);
+            
             if (parentApplicationName != null) {
                 short parentApplicationType = NumberUtils.parseShort(request.getMetadata(SamplePluginConstants.META_PARENT_APPLICATION_TYPE), ServiceType.UNDEFINED.getCode());
                 recorder.recordParentApplication(parentApplicationName, parentApplicationType);
@@ -95,7 +109,12 @@ public class ProcessInterceptor extends SpanSimpleAroundInterceptor {
         TargetClass14_Request request = (TargetClass14_Request)args[0];
 
         recorder.recordApi(methodDescriptor);
-        recorder.recordException(throwable);
         recorder.recordAttribute(SamplePluginConstants.MY_RPC_ARGUMENT_ANNOTATION_KEY, request.getArgument());
+        
+        if (throwable == null) {
+            recorder.recordAttribute(SamplePluginConstants.MY_RPC_RESULT_ANNOTATION_KEY, result);
+        } else {
+            recorder.recordException(throwable);
+        }
     }
 }

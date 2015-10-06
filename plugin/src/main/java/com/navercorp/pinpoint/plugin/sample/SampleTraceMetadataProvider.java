@@ -31,6 +31,7 @@ public class SampleTraceMetadataProvider implements TraceMetadataProvider {
         context.addServiceType(SamplePluginConstants.MY_SERVICE_TYPE);
         context.addAnnotationKey(SamplePluginConstants.ANNOTATION_KEY_MY_VALUE);
         
+        context.addServiceType(SamplePluginConstants.MY_RPC_SERVER_SERVICE_TYPE);
         context.addServiceType(SamplePluginConstants.MY_RPC_CLIENT_SERVICE_TYPE);
         context.addAnnotationKey(SamplePluginConstants.MY_RPC_PROCEDURE_ANNOTATION_KEY);
         context.addAnnotationKey(SamplePluginConstants.MY_RPC_ARGUMENT_ANNOTATION_KEY);
