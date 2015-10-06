@@ -24,6 +24,8 @@ import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFile
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
+import static com.navercorp.pinpoint.common.util.VarArgs.va;
+
 /**
  * Constructor interceptors can be grouped too. But there is a limitation.
  * 
@@ -54,10 +56,10 @@ public class Sample_06_Constructor_Interceptor_Group_Limitation implements Pinpo
         InterceptorGroup group = instrumentor.getInterceptorGroup("SAMPLE_GROUP");
 
         InstrumentMethod targetConstructorA = target.getConstructor();
-        targetConstructorA.addGroupedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", group, SamplePluginConstants.MY_SERVICE_TYPE);
+        targetConstructorA.addGroupedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", va(SamplePluginConstants.MY_SERVICE_TYPE), group);
         
         InstrumentMethod targetConstructorB = target.getConstructor("int");
-        targetConstructorB.addGroupedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", group, SamplePluginConstants.MY_SERVICE_TYPE);
+        targetConstructorB.addGroupedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", va(SamplePluginConstants.MY_SERVICE_TYPE), group);
         
         return target.toBytecode();
     }

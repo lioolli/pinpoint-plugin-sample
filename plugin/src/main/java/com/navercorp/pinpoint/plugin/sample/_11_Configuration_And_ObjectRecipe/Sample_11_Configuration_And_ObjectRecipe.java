@@ -24,6 +24,8 @@ import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
 import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
 import com.navercorp.pinpoint.bootstrap.plugin.ObjectRecipe;
 
+import static com.navercorp.pinpoint.common.util.VarArgs.va;
+
 /**
  * ProfilerPlugin and PinpointClassFileTransformer implementation classes are loaded by a plugin class loader whose parent is system class loader when Pinpoint agent is initialized. 
  * But interceptor classes are loaded by the class loader which loads the target class. These target class loaders cannot see the plugin class loader.
@@ -52,7 +54,7 @@ public class Sample_11_Configuration_And_ObjectRecipe implements PinpointClassFi
         // targetMethod.addInterceptor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.HelloInterceptor", new StringTrimmer(maxLen));
         
         ObjectRecipe trimmerRecipe = ObjectRecipe.byConstructor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.StringTrimmer", maxLen);
-        targetMethod.addInterceptor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.HelloInterceptor", trimmerRecipe);
+        targetMethod.addInterceptor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.HelloInterceptor", va(trimmerRecipe));
 
         return target.toBytecode();
     }

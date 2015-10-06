@@ -25,6 +25,8 @@ import com.navercorp.pinpoint.bootstrap.interceptor.group.ExecutionPolicy;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
+import static com.navercorp.pinpoint.common.util.VarArgs.va;
+
 /**
  * We want to trace TargetClass03's methods targetMethodA, and targetMethodB which invokes targetMethodA.
  * In this case, if targetMethodB is executed, 2 traces are recorded.
@@ -51,11 +53,11 @@ public class Sample_03_Use_Interceptor_Group_To_Prevent_Duplicated_Trace impleme
 
         // Add interceptor with a group and an constructor argument
         InstrumentMethod targetMethodA = target.getDeclaredMethod("targetMethodA");
-        targetMethodA.addGroupedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", group, SamplePluginConstants.MY_SERVICE_TYPE);
+        targetMethodA.addGroupedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", va(SamplePluginConstants.MY_SERVICE_TYPE), group);
         
         // Add interceptor with a group and an constructor argument
         InstrumentMethod targetMethodB = target.getDeclaredMethod("targetMethodB", "int");
-        targetMethodB.addGroupedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", group, SamplePluginConstants.MY_SERVICE_TYPE);
+        targetMethodB.addGroupedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", va(SamplePluginConstants.MY_SERVICE_TYPE), group);
         
         return target.toBytecode();
     }
