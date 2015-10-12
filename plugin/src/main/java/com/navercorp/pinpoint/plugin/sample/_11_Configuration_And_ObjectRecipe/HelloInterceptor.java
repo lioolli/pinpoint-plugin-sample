@@ -45,7 +45,7 @@ public class HelloInterceptor implements AroundInterceptor1 {
     }
 
     @Override
-    public void after(Object target, Object result, Throwable throwable, Object arg0) {
+    public void after(Object target, Object arg0, Object result, Throwable throwable) {
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;

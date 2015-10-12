@@ -108,7 +108,7 @@ public class RecordArgsAndReturnValueInterceptor implements AroundInterceptor1 {
     }
 
     @Override
-    public void after(Object target, Object result, Throwable throwable, Object arg0) {
+    public void after(Object target, Object arg0, Object result, Throwable throwable) {
         if (isDebug) {
             logger.afterInterceptor(target, new Object[] { arg0 });
         }

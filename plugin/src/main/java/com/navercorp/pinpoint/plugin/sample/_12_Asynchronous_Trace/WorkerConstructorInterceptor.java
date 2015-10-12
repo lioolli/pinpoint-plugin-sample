@@ -30,7 +30,7 @@ public class WorkerConstructorInterceptor implements AfterInterceptor2 {
     }
 
     @Override
-    public void after(Object target, Object result, Throwable throwable, Object arg0, Object arg1) {
+    public void after(Object target, Object arg0, Object arg1, Object result, Throwable throwable) {
         AsyncTraceId asyncTraceId = (AsyncTraceId)group.getCurrentInvocation().getAttachment();
         ((AsyncTraceIdAccessor)target)._$PINPOINT$_setAsyncTraceId(asyncTraceId);
     }
