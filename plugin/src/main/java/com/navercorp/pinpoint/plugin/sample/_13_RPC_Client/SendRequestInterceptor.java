@@ -14,14 +14,12 @@
  */
 package com.navercorp.pinpoint.plugin.sample._13_RPC_Client;
 
-import com.navercorp.pinpoint.bootstrap.context.Header;
 import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.context.TraceId;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
-import com.navercorp.pinpoint.bootstrap.sampler.SamplingFlagUtils;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 import com.navercorp.plugin.sample.target.TargetClass13_Request;
 
@@ -77,7 +75,7 @@ public class SendRequestInterceptor implements AroundInterceptor1 {
     }
 
     @Override
-    public void after(Object target, Object result, Throwable throwable, Object arg0) {
+    public void after(Object target, Object arg0, Object result, Throwable throwable) {
         Trace trace = traceContext.currentTraceObject();
         if (trace == null) {
             return;
