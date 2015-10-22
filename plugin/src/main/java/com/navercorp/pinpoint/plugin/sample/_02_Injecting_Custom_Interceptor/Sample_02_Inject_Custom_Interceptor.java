@@ -20,16 +20,16 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentClass;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
-import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
 
 /**
  * Of course you can inject a custom interceptor.
  * See {@link HelloInterceptor} to learn how to write an interceptor.
  */
-public class Sample_02_Inject_Custom_Interceptor implements PinpointClassFileTransformer {
+public class Sample_02_Inject_Custom_Interceptor implements TransformCallback {
 
     @Override
-    public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+    public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
         InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
         InstrumentMethod targetMethod = target.getDeclaredMethod("targetMethod", "java.lang.String");
         

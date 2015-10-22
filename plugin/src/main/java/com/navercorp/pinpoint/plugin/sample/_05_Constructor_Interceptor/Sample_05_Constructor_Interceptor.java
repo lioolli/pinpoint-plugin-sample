@@ -20,7 +20,7 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentClass;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
-import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 import static com.navercorp.pinpoint.common.util.VarArgs.va;
@@ -28,10 +28,10 @@ import static com.navercorp.pinpoint.common.util.VarArgs.va;
 /**
  * You can inject an interceptor to constructors too.
  */
-public class Sample_05_Constructor_Interceptor implements PinpointClassFileTransformer {
+public class Sample_05_Constructor_Interceptor implements TransformCallback {
 
     @Override
-    public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+    public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
         InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
         
         // Note that getConstructor() returns InstrumentMethod

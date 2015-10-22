@@ -21,10 +21,8 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentClass;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
-import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
 import com.navercorp.pinpoint.bootstrap.plugin.ObjectRecipe;
-
-import static com.navercorp.pinpoint.common.util.VarArgs.va;
 
 /**
  * ProfilerPlugin and PinpointClassFileTransformer implementation classes are loaded by a plugin class loader whose parent is system class loader when Pinpoint agent is initialized. 
@@ -39,10 +37,10 @@ import static com.navercorp.pinpoint.common.util.VarArgs.va;
  * 
  * This sample also shows how to read configurations in pinpoint.config file via {@link ProfilerConfig}.
  */
-public class Sample_11_Configuration_And_ObjectRecipe implements PinpointClassFileTransformer {
+public class Sample_11_Configuration_And_ObjectRecipe implements TransformCallback {
 
     @Override
-    public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+    public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
         InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
         InstrumentMethod targetMethod = target.getDeclaredMethod("hello", "java.lang.String");
         

@@ -19,7 +19,7 @@ import java.security.ProtectionDomain;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentClass;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
-import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
 import com.navercorp.plugin.sample.target.TargetClass10_Consumer;
 import com.navercorp.plugin.sample.target.TargetClass10_Message;
 import com.navercorp.plugin.sample.target.TargetClass10_Producer;
@@ -33,10 +33,10 @@ import com.navercorp.plugin.sample.target.TargetClass10_Producer;
  */
 public class Sample_10_Adding_Field {
 
-    public static class Producer implements PinpointClassFileTransformer {
+    public static class Producer implements TransformCallback {
         
         @Override
-        public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+        public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
             InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
 
             target.getDeclaredMethod("produce").addInterceptor("com.navercorp.pinpoint.plugin.sample._10_Adding_Field.ProducerInterceptor");
@@ -45,10 +45,10 @@ public class Sample_10_Adding_Field {
         }
     }
     
-    public static class Consumer implements PinpointClassFileTransformer {
+    public static class Consumer implements TransformCallback {
         
         @Override
-        public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+        public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
             InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
 
             target.getDeclaredMethod("consume", "com.navercorp.plugin.sample.target.TargetClass10_Message").addInterceptor("com.navercorp.pinpoint.plugin.sample._10_Adding_Field.ConsumerInterceptor");
@@ -57,10 +57,10 @@ public class Sample_10_Adding_Field {
         }
     }
     
-    public static class Message implements PinpointClassFileTransformer {
+    public static class Message implements TransformCallback {
         
         @Override
-        public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+        public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
             InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
 
             // Add field to the message class. Note that you don't need to provide the field name. 

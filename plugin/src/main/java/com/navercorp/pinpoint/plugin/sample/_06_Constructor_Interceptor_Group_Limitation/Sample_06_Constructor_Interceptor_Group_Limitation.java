@@ -20,7 +20,7 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentClass;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
-import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
@@ -48,10 +48,10 @@ import static com.navercorp.pinpoint.common.util.VarArgs.va;
  * 
  * But for constructors, methods of A' and B' are all executed because when B' is executed, A' is not active.
  */
-public class Sample_06_Constructor_Interceptor_Group_Limitation implements PinpointClassFileTransformer {
+public class Sample_06_Constructor_Interceptor_Group_Limitation implements TransformCallback {
 
     @Override
-    public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+    public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
         InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
         InterceptorGroup group = instrumentor.getInterceptorGroup("SAMPLE_GROUP");
 

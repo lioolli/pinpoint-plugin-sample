@@ -22,7 +22,7 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
 import com.navercorp.pinpoint.bootstrap.instrument.MethodFilter;
 import com.navercorp.pinpoint.bootstrap.instrument.MethodFilters;
-import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 import static com.navercorp.pinpoint.common.util.VarArgs.va;
@@ -32,10 +32,10 @@ import static com.navercorp.pinpoint.common.util.VarArgs.va;
  * 
  * {@link MethodFilters} provides factory methods for pre-defined filters.
  */
-public class Sample_07_Use_MethodFilter_To_Intercept_Multiple_Methods implements PinpointClassFileTransformer {
+public class Sample_07_Use_MethodFilter_To_Intercept_Multiple_Methods implements TransformCallback {
 
     @Override
-    public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+    public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
         InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
 
         // Get target methods filtered by name.
