@@ -35,7 +35,7 @@ Both ServiceType and AnnotationKey's code value must be unique. If you're writin
 
 
 ### ProfilerPlugin
-A ProfilerPlugin adds [PinpointClassFileTransformer](https://github.com/naver/pinpoint/blob/master/bootstrap-core/src/main/java/com/navercorp/pinpoint/bootstrap/instrument/transformer/PinpointClassFileTransformer.java)s to Pinpoint.
+A ProfilerPlugin adds [TransformCallback](https://github.com/naver/pinpoint/blob/master/bootstrap-core/src/main/java/com/navercorp/pinpoint/bootstrap/instrument/transformer/TransformCallback.java)s to Pinpoint.
 
 A PinpointClassFileTransformer transforms a target class by adding interceptors, getters and/or fields. You can find example codes in plugin-sample-plugin project.
 

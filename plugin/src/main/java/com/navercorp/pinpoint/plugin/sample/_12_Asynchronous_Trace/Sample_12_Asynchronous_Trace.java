@@ -22,7 +22,7 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentClass;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
-import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
 import com.navercorp.pinpoint.bootstrap.interceptor.SpanAsyncEventSimpleAroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.ExecutionPolicy;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
@@ -45,9 +45,9 @@ import static com.navercorp.pinpoint.common.util.VarArgs.va;
 public class Sample_12_Asynchronous_Trace {
     private static final String GROUP_NAME = "AsyncSample";
     
-    public static class AsyncInitiator implements PinpointClassFileTransformer {
+    public static class AsyncInitiator implements TransformCallback {
         @Override
-        public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+        public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
             // Group interceptors to pass AsyncTraceId as interceptor group invocation attachment.
             InterceptorGroup group = instrumentor.getInterceptorGroup(GROUP_NAME);
 
@@ -59,10 +59,10 @@ public class Sample_12_Asynchronous_Trace {
         }
     }
     
-    public static class Worker implements PinpointClassFileTransformer {
+    public static class Worker implements TransformCallback {
 
         @Override
-        public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+        public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
             // Group interceptors to pass AsyncTraceId as interceptor group invocation attachment.
             InterceptorGroup group = instrumentor.getInterceptorGroup(GROUP_NAME);
             
@@ -79,10 +79,10 @@ public class Sample_12_Asynchronous_Trace {
         }
     }
     
-    public static class Future implements PinpointClassFileTransformer {
+    public static class Future implements TransformCallback {
 
         @Override
-        public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+        public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
             InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
             
             InstrumentMethod get = target.getDeclaredMethod("get");

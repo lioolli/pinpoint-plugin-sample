@@ -19,7 +19,7 @@ import java.security.ProtectionDomain;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentClass;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
-import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
 
 /**
  * To trace a transaction across nodes, you have to attach some tracing data to RPC calls.
@@ -27,10 +27,10 @@ import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFile
  * 
  * Target classes are just for this example. They are not real RPC client.
  */
-public class Sample_13_RPC_Client implements PinpointClassFileTransformer {
+public class Sample_13_RPC_Client implements TransformCallback {
 
     @Override
-    public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+    public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
         InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
 
         target.addGetter("com.navercorp.pinpoint.plugin.sample._13_RPC_Client.ServerAddressGetter", "serverAddress");

@@ -20,7 +20,7 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentClass;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
-import com.navercorp.pinpoint.bootstrap.instrument.transformer.PinpointClassFileTransformer;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
 import com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
@@ -30,10 +30,10 @@ import static com.navercorp.pinpoint.common.util.VarArgs.va;
  * Pinpiont provides {@link BasicMethodInterceptor} which records method execution time and exception.
  * This example shows how to inject it to a method. It also shows how to pass constructor arguments to the interceptor.
  */
-public class Sample_01_Inject_BasicMethodInterceptor implements PinpointClassFileTransformer {
+public class Sample_01_Inject_BasicMethodInterceptor implements TransformCallback {
 
     @Override
-    public byte[] transform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+    public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
         // 1. Get InstrumentClass of the target class
         InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
         
