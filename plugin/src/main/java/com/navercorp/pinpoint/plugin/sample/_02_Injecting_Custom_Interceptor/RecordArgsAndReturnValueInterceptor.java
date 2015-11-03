@@ -18,13 +18,6 @@ import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
-import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor;
-import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor0;
-import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor1;
-import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor2;
-import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor3;
-import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor4;
-import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor5;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor0;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
@@ -32,13 +25,6 @@ import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor2;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor3;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor4;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor5;
-import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor;
-import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor0;
-import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor1;
-import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor2;
-import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor3;
-import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor4;
-import com.navercorp.pinpoint.bootstrap.interceptor.BeforeInterceptor5;
 import com.navercorp.pinpoint.bootstrap.interceptor.StaticAroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
@@ -50,20 +36,6 @@ import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
  * 
  * An interceptor have to implement one of following interfaces:
  * 
- * <li>{@link BeforeInterceptor}</li>
- * <li>{@link BeforeInterceptor0}</li>
- * <li>{@link BeforeInterceptor1}</li>
- * <li>{@link BeforeInterceptor2}</li>
- * <li>{@link BeforeInterceptor3}</li>
- * <li>{@link BeforeInterceptor4}</li>
- * <li>{@link BeforeInterceptor5}</li>
- * <li>{@link AfterInterceptor}</li>
- * <li>{@link AfterInterceptor0}</li>
- * <li>{@link AfterInterceptor1}</li>
- * <li>{@link AfterInterceptor2}</li>
- * <li>{@link AfterInterceptor3}</li>
- * <li>{@link AfterInterceptor4}</li>
- * <li>{@link AfterInterceptor5}</li>
  * <li>{@link AroundInterceptor}</li>
  * <li>{@link AroundInterceptor0}</li>
  * <li>{@link AroundInterceptor1}</li>

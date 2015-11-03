@@ -16,17 +16,24 @@ package com.navercorp.pinpoint.plugin.sample._12_Asynchronous_Trace;
 
 import com.navercorp.pinpoint.bootstrap.async.AsyncTraceIdAccessor;
 import com.navercorp.pinpoint.bootstrap.context.AsyncTraceId;
-import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor2;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor2;
+import com.navercorp.pinpoint.bootstrap.interceptor.annotation.IgnoreMethod;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 
 /**
  * This interceptor get AsyncTraceId from interceptor group invocation attachment and set it to the initializing object through AsyncTraceIdAccessor
  */
-public class WorkerConstructorInterceptor implements AfterInterceptor2 {
+public class WorkerConstructorInterceptor implements AroundInterceptor2 {
     private final InterceptorGroup group;
     
     public WorkerConstructorInterceptor(InterceptorGroup group) {
         this.group = group;
+    }
+
+    @IgnoreMethod
+    @Override
+    public void before(Object target, Object arg0, Object arg1) {
+
     }
 
     @Override

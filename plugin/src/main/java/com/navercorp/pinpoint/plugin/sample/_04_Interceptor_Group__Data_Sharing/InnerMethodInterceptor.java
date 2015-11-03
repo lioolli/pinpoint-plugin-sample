@@ -14,21 +14,28 @@
  */
 package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing;
 
-import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor0;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor0;
+import com.navercorp.pinpoint.bootstrap.interceptor.annotation.IgnoreMethod;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
 import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
 
 /**
  * This interceptor uses {@link InterceptorGroupInvocation} attachment to pass data to {@link OuterMethodInterceptor}
  */
-public class InnerMethodInterceptor implements AfterInterceptor0 {
+public class InnerMethodInterceptor implements AroundInterceptor0 {
     private final InterceptorGroup group;
 
     // An interceptor receives an InterceptorGroup through its constructor
     public InnerMethodInterceptor(InterceptorGroup group) {
         this.group = group;
     }
-    
+
+    @IgnoreMethod
+    @Override
+    public void before(Object target) {
+
+    }
+
     @Override
     public void after(Object target, Object result, Throwable throwable) {
         MyAttachment attachment = (MyAttachment)group.getCurrentInvocation().getAttachment();
