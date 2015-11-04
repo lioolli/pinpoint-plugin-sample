@@ -14,10 +14,17 @@
  */
 package com.navercorp.pinpoint.plugin.sample._10_Adding_Field;
 
-import com.navercorp.pinpoint.bootstrap.interceptor.AfterInterceptor0;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor0;
+import com.navercorp.pinpoint.bootstrap.interceptor.annotation.IgnoreMethod;
 import com.navercorp.plugin.sample.target.TargetClass10_Producer;
 
-public class ProducerInterceptor implements AfterInterceptor0 {
+public class ProducerInterceptor implements AroundInterceptor0 {
+
+    @IgnoreMethod
+    @Override
+    public void before(Object target) {
+
+    }
 
     @Override
     public void after(Object target, Object result, Throwable throwable) {
