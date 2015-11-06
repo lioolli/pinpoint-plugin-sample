@@ -45,7 +45,7 @@ public class Sample_11_Configuration_And_ObjectRecipe implements TransformCallba
         InstrumentMethod targetMethod = target.getDeclaredMethod("hello", "java.lang.String");
         
         // Get ProfilerConfig
-        ProfilerConfig config = instrumentor.getTraceContext().getProfilerConfig();
+        ProfilerConfig config = instrumentor.getProfilerConfig();
         int maxLen = config.readInt("profiler.sample11.maxLen", 8);
         
         // If you pass StringTrimmer object directly like below, Pinpoint agent fails to create the interceptor instance. 
