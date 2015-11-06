@@ -1,6 +1,7 @@
 # Pinpoint Profiler Plugin Sample
 
 [![Join the chat at https://gitter.im/naver/pinpoint-plugin-sample](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/naver/pinpoint-plugin-sample?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 You can extend Pinoint's profiling ability by writing a Pinpoint profiler plugin. This sample project shows how to write it. It consists of 3 modules:
 
 * plugin-sample-target: target library
