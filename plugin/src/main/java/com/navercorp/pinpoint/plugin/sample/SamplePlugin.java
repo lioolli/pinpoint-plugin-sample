@@ -14,6 +14,8 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformTemplate;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformTemplateAware;
 import com.navercorp.pinpoint.bootstrap.plugin.ProfilerPlugin;
 import com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext;
 import com.navercorp.pinpoint.plugin.sample._01_Injecting_BasicMethodInterceptor.Sample_01_Inject_BasicMethodInterceptor;
@@ -38,33 +40,34 @@ import com.navercorp.pinpoint.plugin.sample._14_RPC_Server.Sample_14_RPC_Server;
  * 
  * @author Jongho Moon
  */
-public class SamplePlugin implements ProfilerPlugin {
+public class SamplePlugin implements ProfilerPlugin, TransformTemplateAware {
+    private TransformTemplate transformTemplate;
     
     @Override
     public void setup(ProfilerPluginSetupContext context) {
         addApplicationTypeDetector(context);
-        addTransformers(context);
+        addTransformers();
     }
 
-    private void addTransformers(ProfilerPluginSetupContext context) {
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass01", new Sample_01_Inject_BasicMethodInterceptor());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass02", new Sample_02_Inject_Custom_Interceptor());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass03", new Sample_03_Use_Interceptor_Group_To_Prevent_Duplicated_Trace());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass04", new Sample_04_Interceptors_In_A_Group_Share_Value());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass05", new Sample_05_Constructor_Interceptor());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass06", new Sample_06_Constructor_Interceptor_Group_Limitation());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass07", new Sample_07_Use_MethodFilter_To_Intercept_Multiple_Methods());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass08", new Sample_08_Interceptor_Annotations());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass09", new Sample_09_Adding_Getter());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Producer", new Sample_10_Adding_Field.Producer());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Consumer", new Sample_10_Adding_Field.Consumer());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass10_Message", new Sample_10_Adding_Field.Message());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass11", new Sample_11_Configuration_And_ObjectRecipe());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass12_AsyncInitiator", new Sample_12_Asynchronous_Trace.AsyncInitiator());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass12_Future", new Sample_12_Asynchronous_Trace.Future());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass12_Worker", new Sample_12_Asynchronous_Trace.Worker());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass13_Client", new Sample_13_RPC_Client());
-        context.addClassFileTransformer("com.navercorp.plugin.sample.target.TargetClass14_Server", new Sample_14_RPC_Server());
+    private void addTransformers() {
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass01", new Sample_01_Inject_BasicMethodInterceptor());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass02", new Sample_02_Inject_Custom_Interceptor());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass03", new Sample_03_Use_Interceptor_Group_To_Prevent_Duplicated_Trace());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass04", new Sample_04_Interceptors_In_A_Group_Share_Value());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass05", new Sample_05_Constructor_Interceptor());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass06", new Sample_06_Constructor_Interceptor_Group_Limitation());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass07", new Sample_07_Use_MethodFilter_To_Intercept_Multiple_Methods());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass08", new Sample_08_Interceptor_Annotations());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass09", new Sample_09_Adding_Getter());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass10_Producer", new Sample_10_Adding_Field.Producer());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass10_Consumer", new Sample_10_Adding_Field.Consumer());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass10_Message", new Sample_10_Adding_Field.Message());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass11", new Sample_11_Configuration_And_ObjectRecipe());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass12_AsyncInitiator", new Sample_12_Asynchronous_Trace.AsyncInitiator());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass12_Future", new Sample_12_Asynchronous_Trace.Future());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass12_Worker", new Sample_12_Asynchronous_Trace.Worker());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass13_Client", new Sample_13_RPC_Client());
+        transformTemplate.transform("com.navercorp.plugin.sample.target.TargetClass14_Server", new Sample_14_RPC_Server());
     }
     
     /**
@@ -73,5 +76,9 @@ public class SamplePlugin implements ProfilerPlugin {
     private void addApplicationTypeDetector(ProfilerPluginSetupContext context) {
         context.addApplicationTypeDetector(new SampleServerDetector());
     }
-    
+
+    @Override
+    public void setTransformTemplate(TransformTemplate transformTemplate) {
+        this.transformTemplate = transformTemplate;
+    }
 }
