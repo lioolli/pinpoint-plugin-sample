@@ -22,7 +22,7 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
 import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
-import com.navercorp.pinpoint.bootstrap.plugin.ObjectRecipe;
+import com.navercorp.pinpoint.bootstrap.plugin.ObjectFactory;
 
 /**
  * ProfilerPlugin and PinpointClassFileTransformer implementation classes are loaded by a plugin class loader whose parent is system class loader when Pinpoint agent is initialized. 
@@ -30,7 +30,7 @@ import com.navercorp.pinpoint.bootstrap.plugin.ObjectRecipe;
  * 
  * Therefore for a class X in a plugin, X in ProfilerPlugin and PinpointClassFileTransformer implementations is not identical with X in interceptors. 
  * This makes it impossible for a transformer to pass a constructor argument whose type is defined in the plugin to a interceptor. 
- * To handle this problem, you can pass an {@link ObjectRecipe} which describes how to create the argument.
+ * To handle this problem, you can pass an {@link ObjectFactory} which describes how to create the argument.
  * 
  * Note that, for the same reason, you should avoid sharing values by static variables of classes defined in a plugin.
  * 
@@ -51,8 +51,8 @@ public class Sample_11_Configuration_And_ObjectRecipe implements TransformCallba
         // If you pass StringTrimmer object directly like below, Pinpoint agent fails to create the interceptor instance. 
         // targetMethod.addInterceptor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.HelloInterceptor", new StringTrimmer(maxLen));
         
-        ObjectRecipe trimmerRecipe = ObjectRecipe.byConstructor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.StringTrimmer", maxLen);
-        targetMethod.addInterceptor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.HelloInterceptor", new Object[] { trimmerRecipe });
+        ObjectFactory trimmerFactory = ObjectFactory.byConstructor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.StringTrimmer", maxLen);
+        targetMethod.addInterceptor("com.navercorp.pinpoint.plugin.sample._11_Configuration_And_ObjectRecipe.HelloInterceptor", new Object[] { trimmerFactory });
 
         return target.toBytecode();
     }
