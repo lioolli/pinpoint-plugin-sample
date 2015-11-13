@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing;
+package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Scope__Data_Sharing;
 
 public class MyAttachment {
     private boolean trace;

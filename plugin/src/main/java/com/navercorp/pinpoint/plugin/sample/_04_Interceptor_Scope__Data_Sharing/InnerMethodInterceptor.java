@@ -12,22 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing;
+package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Scope__Data_Sharing;
 
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor0;
 import com.navercorp.pinpoint.bootstrap.interceptor.annotation.IgnoreMethod;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScope;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScopeInvocation;
 
 /**
- * This interceptor uses {@link InterceptorGroupInvocation} attachment to pass data to {@link OuterMethodInterceptor}
+ * This interceptor uses {@link InterceptorScopeInvocation} attachment to pass data to {@link OuterMethodInterceptor}
  */
 public class InnerMethodInterceptor implements AroundInterceptor0 {
-    private final InterceptorGroup group;
+    private final InterceptorScope scope;
 
-    // An interceptor receives an InterceptorGroup through its constructor
-    public InnerMethodInterceptor(InterceptorGroup group) {
-        this.group = group;
+    // An interceptor receives an InterceptorScope through its constructor
+    public InnerMethodInterceptor(InterceptorScope scope) {
+        this.scope = scope;
     }
 
     @IgnoreMethod
@@ -38,7 +38,7 @@ public class InnerMethodInterceptor implements AroundInterceptor0 {
 
     @Override
     public void after(Object target, Object result, Throwable throwable) {
-        MyAttachment attachment = (MyAttachment)group.getCurrentInvocation().getAttachment();
+        MyAttachment attachment = (MyAttachment)scope.getCurrentInvocation().getAttachment();
         
         if (attachment.isTrace()) {
             attachment.setValue(result);

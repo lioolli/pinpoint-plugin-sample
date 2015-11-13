@@ -18,16 +18,16 @@ import com.navercorp.pinpoint.bootstrap.async.AsyncTraceIdAccessor;
 import com.navercorp.pinpoint.bootstrap.context.AsyncTraceId;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor2;
 import com.navercorp.pinpoint.bootstrap.interceptor.annotation.IgnoreMethod;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScope;
 
 /**
- * This interceptor get AsyncTraceId from interceptor group invocation attachment and set it to the initializing object through AsyncTraceIdAccessor
+ * This interceptor get AsyncTraceId from interceptor scope invocation attachment and set it to the initializing object through AsyncTraceIdAccessor
  */
 public class WorkerConstructorInterceptor implements AroundInterceptor2 {
-    private final InterceptorGroup group;
+    private final InterceptorScope scope;
     
-    public WorkerConstructorInterceptor(InterceptorGroup group) {
-        this.group = group;
+    public WorkerConstructorInterceptor(InterceptorScope scope) {
+        this.scope = scope;
     }
 
     @IgnoreMethod
@@ -38,7 +38,7 @@ public class WorkerConstructorInterceptor implements AroundInterceptor2 {
 
     @Override
     public void after(Object target, Object arg0, Object arg1, Object result, Throwable throwable) {
-        AsyncTraceId asyncTraceId = (AsyncTraceId)group.getCurrentInvocation().getAttachment();
+        AsyncTraceId asyncTraceId = (AsyncTraceId)scope.getCurrentInvocation().getAttachment();
         ((AsyncTraceIdAccessor)target)._$PINPOINT$_setAsyncTraceId(asyncTraceId);
     }
 }

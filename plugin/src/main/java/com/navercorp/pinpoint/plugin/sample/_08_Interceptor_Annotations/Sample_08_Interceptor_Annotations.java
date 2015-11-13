@@ -20,22 +20,18 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentClass;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
 import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
-import com.navercorp.pinpoint.bootstrap.interceptor.annotation.Group;
-import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetConstructor;
-import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetConstructors;
-import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetFilter;
-import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetMethod;
-import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetMethods;
+import com.navercorp.pinpoint.bootstrap.interceptor.annotation.*;
+import com.navercorp.pinpoint.bootstrap.interceptor.annotation.Scope;
 
 /**
- * There are annotations for interceptor class to declare 1. targets of the interceptor, 2. interceptor group the interceptor is in.
+ * There are annotations for interceptor class to declare 1. targets of the interceptor, 2. interceptor scope the interceptor is in.
  * 
  * To specify target, use {@link TargetMethod}, {@link TargetConstructor}, {@link TargetFilter}.
  * To specify multiple targets, use {@link TargetMethods}, {@link TargetConstructors}.
- * Note that these are effective only when the interceptor is injected by one of {@link InstrumentClass}'s addInterceptor() or addGroupedInterceptor() method.
+ * Note that these are effective only when the interceptor is injected by one of {@link InstrumentClass}'s addInterceptor() or addScopedInterceptor() method.
  * 
- * To specify interceptor group, use {@link Group}.
- * If you pass other InterceptorGroup through addGroupedInterceptor(), the annotation will be ignored.
+ * To specify interceptor scope, use {@link Scope}.
+ * If you pass other InterceptorScope through addScopedInterceptor(), the annotation will be ignored.
  * 
  * @see AnnotatedInterceptor
  */

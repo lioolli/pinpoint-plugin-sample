@@ -20,7 +20,7 @@ import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScope;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 /**
@@ -29,12 +29,12 @@ import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 public class AsyncInitiatorInterceptor implements AroundInterceptor1 {
     private final MethodDescriptor descriptor;
     private final TraceContext traceContext;
-    private final InterceptorGroup group;
+    private final InterceptorScope scope;
 
-    public AsyncInitiatorInterceptor(TraceContext traceContext, MethodDescriptor descriptor, InterceptorGroup group) {
+    public AsyncInitiatorInterceptor(TraceContext traceContext, MethodDescriptor descriptor, InterceptorScope scope) {
         this.traceContext = traceContext;
         this.descriptor = descriptor;
-        this.group = group;
+        this.scope = scope;
     }
     
     @Override
@@ -57,9 +57,9 @@ public class AsyncInitiatorInterceptor implements AroundInterceptor1 {
         // Finally, you have to pass the AsyncTraceId to the thread which handles the async task.
         // How to do that depends on the target library implementation.
         // 
-        // In this sample, we set the id as group invocation attachment like below to pass it to the constructor interceptor of TargetClass12_Worker which has run() method that handles the async task.
+        // In this sample, we set the id as scope invocation attachment like below to pass it to the constructor interceptor of TargetClass12_Worker which has run() method that handles the async task.
         // Then the constructor interceptor will get the attached id and set to the initializing TargetClass12_Worker object.
-        group.getCurrentInvocation().setAttachment(asyncTraceId);
+        scope.getCurrentInvocation().setAttachment(asyncTraceId);
     }
 
     @Override

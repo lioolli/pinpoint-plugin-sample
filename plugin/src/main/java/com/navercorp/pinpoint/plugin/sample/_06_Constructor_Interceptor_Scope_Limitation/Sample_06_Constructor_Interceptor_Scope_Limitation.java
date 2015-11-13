@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample._06_Constructor_Interceptor_Group_Limitation;
+package com.navercorp.pinpoint.plugin.sample._06_Constructor_Interceptor_Scope_Limitation;
 
 import java.security.ProtectionDomain;
 
@@ -21,13 +21,13 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
 import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScope;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 import static com.navercorp.pinpoint.common.util.VarArgs.va;
 
 /**
- * Constructor interceptors can be grouped too. But there is a limitation.
+ * Constructor interceptors can be scoped too. But there is a limitation.
  * 
  * Java enforces that the first operation of a constructor must be invocation of a super constructor or an overloaded constructor.
  * So any injected code (including interceptor call) must come after this.
@@ -43,24 +43,24 @@ import static com.navercorp.pinpoint.common.util.VarArgs.va;
  * B'.before(), B'.after(), A'.before(), A'.after()
  * 
  * 
- * This also effects ExecutionPolicy of grouped interceptors.
- * In case of methods, if A and B are in the same group with execution policy BOUNDARY, methods of B' is not executed.
+ * This also effects ExecutionPolicy of scoped interceptors.
+ * In case of methods, if A and B are in the same scope with execution policy BOUNDARY, methods of B' is not executed.
  * 
  * But for constructors, methods of A' and B' are all executed because when B' is executed, A' is not active.
  */
-public class Sample_06_Constructor_Interceptor_Group_Limitation implements TransformCallback {
+public class Sample_06_Constructor_Interceptor_Scope_Limitation implements TransformCallback {
 
     @Override
     public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
         InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
-        InterceptorGroup group = instrumentor.getInterceptorGroup("SAMPLE_GROUP");
+        InterceptorScope scope = instrumentor.getInterceptorScope("SAMPLE_SCOPE");
 
         InstrumentMethod targetConstructorA = target.getConstructor();
-        targetConstructorA.addGroupedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", va(SamplePluginConstants.MY_SERVICE_TYPE), group);
-        
+        targetConstructorA.addScopedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", va(SamplePluginConstants.MY_SERVICE_TYPE), scope);
+
         InstrumentMethod targetConstructorB = target.getConstructor("int");
-        targetConstructorB.addGroupedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", va(SamplePluginConstants.MY_SERVICE_TYPE), group);
-        
+        targetConstructorB.addScopedInterceptor("com.navercorp.pinpoint.bootstrap.interceptor.BasicMethodInterceptor", va(SamplePluginConstants.MY_SERVICE_TYPE), scope);
+
         return target.toBytecode();
     }
 

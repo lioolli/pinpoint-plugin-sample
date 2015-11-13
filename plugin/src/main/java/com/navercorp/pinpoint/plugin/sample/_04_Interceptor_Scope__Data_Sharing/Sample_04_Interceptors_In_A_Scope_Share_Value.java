@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing;
+package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Scope__Data_Sharing;
 
 import java.security.ProtectionDomain;
 
@@ -21,29 +21,29 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentException;
 import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
 import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.ExecutionPolicy;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.ExecutionPolicy;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScope;
 
 /*
  * Sometimes interceptors need to share values to trace a transaction.
- * You can use InterceptorGroup for that purpose.
+ * You can use InterceptorScope for that purpose.
  */
-public class Sample_04_Interceptors_In_A_Group_Share_Value implements TransformCallback {
+public class Sample_04_Interceptors_In_A_Scope_Share_Value implements TransformCallback {
 
     @Override
     public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
         InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
         
-        // Get the group object from Instrumentor
-        InterceptorGroup group = instrumentor.getInterceptorGroup("SAMPLE_04_GROUP");
+        // Get the scope object from Instrumentor
+        InterceptorScope scope = instrumentor.getInterceptorScope("SAMPLE_04_SCOPE");
 
-        // Put interceptors need to share data to a same group.
+        // Put interceptors need to share data to a same scope.
         InstrumentMethod outerMethod = target.getDeclaredMethod("outerMethod", "java.lang.String");
-        outerMethod.addGroupedInterceptor("com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing.OuterMethodInterceptor", group);
+        outerMethod.addScopedInterceptor("com.navercorp.pinpoint.plugin.sample._04_Interceptor_Scope__Data_Sharing.OuterMethodInterceptor", scope);
         
-        // Note that execution policy of InnerMethodInterceptor is INTERNAL to make the interceptor runs only when other interceptor in the group is active.
+        // Note that execution policy of InnerMethodInterceptor is INTERNAL to make the interceptor runs only when other interceptor in the scope is active.
         InstrumentMethod innerMethod = target.getDeclaredMethod("innerMethod", "java.lang.String");
-        innerMethod.addGroupedInterceptor("com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing.InnerMethodInterceptor", group, ExecutionPolicy.INTERNAL);
+        innerMethod.addScopedInterceptor("com.navercorp.pinpoint.plugin.sample._04_Interceptor_Scope__Data_Sharing.InnerMethodInterceptor", scope, ExecutionPolicy.INTERNAL);
         
         return target.toBytecode();
     }

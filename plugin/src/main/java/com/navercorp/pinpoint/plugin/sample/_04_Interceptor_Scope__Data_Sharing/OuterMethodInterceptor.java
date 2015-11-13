@@ -12,23 +12,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing;
+package com.navercorp.pinpoint.plugin.sample._04_Interceptor_Scope__Data_Sharing;
 
 import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor1;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.AttachmentFactory;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.AttachmentFactory;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScope;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScopeInvocation;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 /**
- * This interceptor attach an object to current {@link InterceptorGroupInvocation}.
+ * This interceptor attach an object to current {@link InterceptorScopeInvocation}.
  * The attachment helps the interceptor collaborates with {@link InnerMethodInterceptor}.
  * 
- * @see Sample_04_Interceptors_In_A_Group_Share_Value
+ * @see Sample_04_Interceptors_In_A_Scope_Share_Value
  * @author Jongho Moon
  */
 public class OuterMethodInterceptor implements AroundInterceptor1 {
@@ -42,13 +42,13 @@ public class OuterMethodInterceptor implements AroundInterceptor1 {
     
     private final MethodDescriptor descriptor;
     private final TraceContext traceContext;
-    private final InterceptorGroup group;
+    private final InterceptorScope scope;
 
-    // An interceptor receives an InterceptorGroup through its constructor
-    public OuterMethodInterceptor(TraceContext traceContext, MethodDescriptor descriptor, InterceptorGroup group) {
+    // An interceptor receives an InterceptorScope through its constructor
+    public OuterMethodInterceptor(TraceContext traceContext, MethodDescriptor descriptor, InterceptorScope scope) {
         this.descriptor = descriptor;
         this.traceContext = traceContext;
-        this.group = group;
+        this.scope = scope;
     }
     
     @Override
@@ -68,7 +68,7 @@ public class OuterMethodInterceptor implements AroundInterceptor1 {
         recorder.recordServiceType(SamplePluginConstants.MY_SERVICE_TYPE);
 
         // create or get attachment
-        MyAttachment attachment = (MyAttachment)group.getCurrentInvocation().getOrCreateAttachment(ATTACHMENT_FACTORY);
+        MyAttachment attachment = (MyAttachment)scope.getCurrentInvocation().getOrCreateAttachment(ATTACHMENT_FACTORY);
         attachment.setTrace(shouldTrace);
     }
 
@@ -80,7 +80,7 @@ public class OuterMethodInterceptor implements AroundInterceptor1 {
         }
         
         try {
-            MyAttachment attachment = (MyAttachment)group.getCurrentInvocation().getAttachment();
+            MyAttachment attachment = (MyAttachment)scope.getCurrentInvocation().getAttachment();
             
             if (!attachment.isTrace()) {
                 return; 
