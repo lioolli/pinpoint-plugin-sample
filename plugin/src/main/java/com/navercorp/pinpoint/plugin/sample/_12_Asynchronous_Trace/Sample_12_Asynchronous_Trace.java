@@ -24,8 +24,8 @@ import com.navercorp.pinpoint.bootstrap.instrument.InstrumentMethod;
 import com.navercorp.pinpoint.bootstrap.instrument.Instrumentor;
 import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
 import com.navercorp.pinpoint.bootstrap.interceptor.SpanAsyncEventSimpleAroundInterceptor;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.ExecutionPolicy;
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroup;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.ExecutionPolicy;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScope;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 import static com.navercorp.pinpoint.common.util.VarArgs.va;
@@ -43,17 +43,17 @@ import static com.navercorp.pinpoint.common.util.VarArgs.va;
  * {@link Worker} transforms TargetClass12_Worker, which handles async task initiated by TargetClass12_AsyncInitiator.
  */
 public class Sample_12_Asynchronous_Trace {
-    private static final String GROUP_NAME = "AsyncSample";
+    private static final String SCOPE_NAME = "AsyncSample";
     
     public static class AsyncInitiator implements TransformCallback {
         @Override
         public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
-            // Group interceptors to pass AsyncTraceId as interceptor group invocation attachment.
-            InterceptorGroup group = instrumentor.getInterceptorGroup(GROUP_NAME);
+            // Scope interceptors to pass AsyncTraceId as interceptor scope invocation attachment.
+            InterceptorScope scope = instrumentor.getInterceptorScope(SCOPE_NAME);
 
             InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
             InstrumentMethod targetMethod = target.getDeclaredMethod("asyncHello", "java.lang.String");
-            targetMethod.addGroupedInterceptor("com.navercorp.pinpoint.plugin.sample._12_Asynchronous_Trace.AsyncInitiatorInterceptor", group);
+            targetMethod.addScopedInterceptor("com.navercorp.pinpoint.plugin.sample._12_Asynchronous_Trace.AsyncInitiatorInterceptor", scope);
 
             return target.toBytecode();
         }
@@ -63,14 +63,14 @@ public class Sample_12_Asynchronous_Trace {
 
         @Override
         public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
-            // Group interceptors to pass AsyncTraceId as interceptor group invocation attachment.
-            InterceptorGroup group = instrumentor.getInterceptorGroup(GROUP_NAME);
+            // Scope interceptors to pass AsyncTraceId as interceptor scope invocation attachment.
+            InterceptorScope scope = instrumentor.getInterceptorScope(SCOPE_NAME);
             
             InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
             target.addField("com.navercorp.pinpoint.bootstrap.async.AsyncTraceIdAccessor");
             
             InstrumentMethod constructor = target.getConstructor("java.lang.String", "com.navercorp.plugin.sample.target.TargetClass12_Future");
-            constructor.addGroupedInterceptor("com.navercorp.pinpoint.plugin.sample._12_Asynchronous_Trace.WorkerConstructorInterceptor", group, ExecutionPolicy.INTERNAL);
+            constructor.addScopedInterceptor("com.navercorp.pinpoint.plugin.sample._12_Asynchronous_Trace.WorkerConstructorInterceptor", scope, ExecutionPolicy.INTERNAL);
             
             InstrumentMethod run = target.getDeclaredMethod("run");
             run.addInterceptor("com.navercorp.pinpoint.plugin.sample._12_Asynchronous_Trace.WorkerRunInterceptor");

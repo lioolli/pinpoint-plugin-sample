@@ -21,10 +21,10 @@ import java.lang.reflect.Method;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.navercorp.pinpoint.bootstrap.interceptor.group.InterceptorGroupInvocation;
+import com.navercorp.pinpoint.bootstrap.interceptor.scope.InterceptorScopeInvocation;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample._04_Interceptor_Group__Data_Sharing.Sample_04_Interceptors_In_A_Group_Share_Value;
+import com.navercorp.pinpoint.plugin.sample._04_Interceptor_Scope__Data_Sharing.Sample_04_Interceptors_In_A_Scope_Share_Value;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -34,11 +34,11 @@ import com.navercorp.plugin.sample.target.TargetClass04;
  *  We want to trace {@link TargetClass04#outerMethod(java.lang.String)} when it's argument starts with "FOO". 
  *  In addition, we want to record the return value of {@link TargetClass04#innerMethod(java.lang.String)} which is invoked by outerMethod() but don't want to record invocation of innerMethod().
  *  
- *  We can do this by sharing data as attachment of {@link InterceptorGroupInvocation}.
- *  When an InterceptorGroupInvocation is activated, interceptors in the group can share an attachment object.
- *  InterceptorGroupInvocation is activated when before() of any of interceptors in the group is invoked, but after() of it is not invoked.
+ *  We can do this by sharing data as attachment of {@link InterceptorScopeInvocation}.
+ *  When an InterceptorScopeInvocation is activated, interceptors in the scope can share an attachment object.
+ *  InterceptorScopeInvocation is activated when before() of any of interceptors in the scope is invoked, but after() of it is not invoked.
  *  
- *  @see Sample_04_Interceptors_In_A_Group_Share_Value
+ *  @see Sample_04_Interceptors_In_A_Scope_Share_Value
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent(SampleTestConstants.AGENT_PATH)

@@ -23,14 +23,14 @@ import org.junit.runner.RunWith;
 
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample._06_Constructor_Interceptor_Group_Limitation.Sample_06_Constructor_Interceptor_Group_Limitation;
+import com.navercorp.pinpoint.plugin.sample._06_Constructor_Interceptor_Scope_Limitation.Sample_06_Constructor_Interceptor_Scope_Limitation;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
 import com.navercorp.plugin.sample.target.TargetClass06;
 
 /**
- * @see Sample_06_Constructor_Interceptor_Group_Limitation
+ * @see Sample_06_Constructor_Interceptor_Scope_Limitation
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)

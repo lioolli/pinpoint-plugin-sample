@@ -19,18 +19,18 @@ import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.Trace;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor0;
-import com.navercorp.pinpoint.bootstrap.interceptor.annotation.Group;
+import com.navercorp.pinpoint.bootstrap.interceptor.annotation.Scope;
 import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetMethod;
 import com.navercorp.pinpoint.bootstrap.interceptor.annotation.TargetMethods;
 import com.navercorp.pinpoint.plugin.sample.SamplePluginConstants;
 
 /**
- * This interceptor declares its targets by @TargetMethods annotation and interceptor group by @Group annotation. 
+ * This interceptor declares its targets by @TargetMethods annotation and interceptor scope by @Scope annotation.
  * 
  * @see Sample_08_Interceptor_Annotations
  * @author Jongho Moon
  */
-@Group("SAMPLE_GROUP")
+@Scope("SAMPLE_SCOPE")
 @TargetMethods({
     @TargetMethod(name="targetMethod"),
     @TargetMethod(name="targetMethod", paramTypes={"java.lang.String"})

@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 import com.navercorp.pinpoint.bootstrap.plugin.test.Expectations;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifier;
 import com.navercorp.pinpoint.bootstrap.plugin.test.PluginTestVerifierHolder;
-import com.navercorp.pinpoint.plugin.sample._03_Interceptor_Group__Prevent_Duplicated_Trace.Sample_03_Use_Interceptor_Group_To_Prevent_Duplicated_Trace;
+import com.navercorp.pinpoint.plugin.sample._03_Interceptor_Scope__Prevent_Duplicated_Trace.Sample_03_Use_Interceptor_Scope_To_Prevent_Duplicated_Trace;
 import com.navercorp.pinpoint.test.plugin.Dependency;
 import com.navercorp.pinpoint.test.plugin.PinpointAgent;
 import com.navercorp.pinpoint.test.plugin.PinpointPluginTestSuite;
@@ -30,12 +30,12 @@ import com.navercorp.plugin.sample.target.TargetClass03;
 
 /**
  * Both {@link TargetClass03#targetMethodA()} and {@link TargetClass03#targetMethodB(int)} have been injected interceptors.
- * But those interceptors are in same interceptor group and their execution policy is BOUNDARY which means "execute only when no other interceptor in the same group is active".
+ * But those interceptors are in same interceptor scope and their execution policy is BOUNDARY which means "execute only when no other interceptor in the same scope is active".
  * (interceptor is active when it's BEFORE() is invoked but not AFTER() yet)
  * 
  * So in {@link #testA()}, only {@link TargetClass03#tergetMethodA()} is recorded and in {@link #testB()}, only {@link TargetClass03#targetMethodB(int)} is recorded.
  * 
- * @see Sample_03_Use_Interceptor_Group_To_Prevent_Duplicated_Trace
+ * @see Sample_03_Use_Interceptor_Scope_To_Prevent_Duplicated_Trace
  * @author Jongho Moon
  */
 @RunWith(PinpointPluginTestSuite.class)
