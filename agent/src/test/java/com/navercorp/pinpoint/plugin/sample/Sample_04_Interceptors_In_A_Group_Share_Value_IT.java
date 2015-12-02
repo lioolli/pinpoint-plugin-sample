@@ -42,7 +42,7 @@ import com.navercorp.plugin.sample.target.TargetClass04;
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent(SampleTestConstants.AGENT_PATH)
-@Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:" + SampleTestConstants.VERSION})
 public class Sample_04_Interceptors_In_A_Group_Share_Value_IT {
 
     @Test

@@ -37,7 +37,7 @@ import com.navercorp.plugin.sample.target.TargetClass11;
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent(SampleTestConstants.AGENT_PATH)
 @PinpointConfig("pinpoint-sample11.config")
-@Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:" + SampleTestConstants.VERSION})
 public class Sample_11_ObjectRecipe_And_Configuration_IT {
 
     @Test

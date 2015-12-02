@@ -37,7 +37,7 @@ import com.navercorp.plugin.sample.target.TargetClass07;
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent(SampleTestConstants.AGENT_PATH)
-@Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:" + SampleTestConstants.VERSION})
 public class Sample_07_Use_MethodFilter_To_Intercept_Multiple_Methods_IT {
 
     @Test
