@@ -37,7 +37,7 @@ import com.navercorp.plugin.sample.target.TargetClass13_Request;
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent(SampleTestConstants.AGENT_PATH)
-@Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:" + SampleTestConstants.VERSION})
 public class Sample_13_RPC_Client_IT {
 
     @Test

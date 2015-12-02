@@ -35,7 +35,7 @@ import com.navercorp.plugin.sample.target.TargetClass09;
  */
 @RunWith(PinpointPluginTestSuite.class)
 @PinpointAgent(SampleTestConstants.AGENT_PATH)
-@Dependency({"com.navercorp.pinpoint:plugin-sample-target:1.5.0-SNAPSHOT"})
+@Dependency({"com.navercorp.pinpoint:plugin-sample-target:" + SampleTestConstants.VERSION})
 public class Sample_09_Adding_Getter_IT {
 
     @Test
