@@ -19,6 +19,6 @@ package com.navercorp.pinpoint.plugin.sample;
  *
  */
 public interface SampleTestConstants {
-    public static final String VERSION = "1.5.1-SNAPSHOT";
+    public static final String VERSION = "1.5.1";
     public static final String AGENT_PATH = "target/plugin-sample-agent-" + VERSION;
 }
