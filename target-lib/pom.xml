@@ -4,7 +4,7 @@
 
     <groupId>com.navercorp.pinpoint</groupId>
     <artifactId>plugin-sample-target</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.2-SNAPSHOT</version>
     <name>Pinpoint Plugin Sample Target Library</name>
     <packaging>jar</packaging>
     
