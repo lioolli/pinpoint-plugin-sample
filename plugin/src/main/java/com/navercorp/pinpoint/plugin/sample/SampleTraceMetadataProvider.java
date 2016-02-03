@@ -14,6 +14,7 @@
  */
 package com.navercorp.pinpoint.plugin.sample;
 
+import com.navercorp.pinpoint.common.trace.AnnotationKeyMatchers;
 import com.navercorp.pinpoint.common.trace.TraceMetadataProvider;
 import com.navercorp.pinpoint.common.trace.TraceMetadataSetupContext;
 
@@ -28,7 +29,7 @@ public class SampleTraceMetadataProvider implements TraceMetadataProvider {
      */
     @Override
     public void setup(TraceMetadataSetupContext context) {
-        context.addServiceType(SamplePluginConstants.MY_SERVICE_TYPE);
+        context.addServiceType(SamplePluginConstants.MY_SERVICE_TYPE, AnnotationKeyMatchers.exact(SamplePluginConstants.ANNOTATION_KEY_MY_VALUE));
         context.addAnnotationKey(SamplePluginConstants.ANNOTATION_KEY_MY_VALUE);
         
         context.addServiceType(SamplePluginConstants.MY_RPC_SERVER_SERVICE_TYPE);
